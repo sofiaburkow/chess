@@ -1,7 +1,6 @@
 // @author Martin Vatshelle - martin.vatshelle@uib.no
 package grid;
 
-import java.util.List;
 import java.util.function.Function;
 
 public interface IGrid<T> extends Iterable<T> {

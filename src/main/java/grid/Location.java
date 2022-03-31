@@ -7,8 +7,6 @@ import java.util.Collection;
 /**
  * This class represents a Location on a grid.
  * That means indices for row and column.
- *
- * @author Martin Vatshelle - martin.vatshelle@uib.no
  */
 public class Location {
 
@@ -41,7 +39,7 @@ public class Location {
 
     /**
      * Returns the Manhattan distance between 2 locations.
-     * That is the shortest distance distance between two points
+     * That is the shortest distance between two points
      * if you can only go East,West,North and South (not diagonally)
      *
      * @param loc

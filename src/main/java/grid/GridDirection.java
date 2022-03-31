@@ -6,18 +6,18 @@ import java.util.List;
 
 /**
  * This class represents the 8 different directions
- * (plus the direction of no movement) in in a grid
+ * (plus the direction of no movement) in a grid
  * which one can move by changing either x or y coordinate by at most 1
  */
 public enum GridDirection {
     EAST(1, 0),
     NORTH(0, -1),
     WEST(-1, 0),
-    SOUTH(0, 1), //
+    SOUTH(0, 1),
     NORTHEAST(1, -1),
     NORTHWEST(-1, -1),
     SOUTHWEST(-1, 1),
-    SOUTHEAST(1, 1), //
+    SOUTHEAST(1, 1),
     CENTER(0, 0);
 
     /**

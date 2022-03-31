@@ -5,8 +5,6 @@ import java.util.Iterator;
 
 /**
  * This class is able to iterate over all locations in a grid.
- *
- * @author Martin Vatshelle - martin.vatshelle@uib.no
  */
 public class GridLocationIterator implements Iterator<Location>, Iterable<Location> {
 
