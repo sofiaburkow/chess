@@ -1,5 +1,4 @@
 package chess.view;
 
-public class ChessViewable {
-
+public interface ChessViewable {
 }
