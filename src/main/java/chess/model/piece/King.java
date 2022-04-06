@@ -1,4 +1,12 @@
 package chess.model.piece;
 
-public class King {
+import grid.Location;
+
+import java.awt.*;
+
+public class King extends Piece {
+    public King(Color color) {
+        super(color);
+    }
+
 }

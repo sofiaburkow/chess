@@ -1,4 +1,11 @@
 package chess.model.piece;
 
-public class Rook {
+import grid.Location;
+
+import java.awt.*;
+
+public class Rook extends Piece {
+    public Rook(Color color) {
+        super(color);
+    }
 }

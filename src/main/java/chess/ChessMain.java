@@ -12,12 +12,6 @@ public class ChessMain {
         JFrame frame = new JFrame("Sofia's Chess Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        /*
-        JPanel mainPanel = new MainPanel();
-        frame.setContentPane(mainPanel);
-
-         */
-
         JPanel clickableBoard = new ClickableBoard();
         frame.setContentPane(clickableBoard);
 

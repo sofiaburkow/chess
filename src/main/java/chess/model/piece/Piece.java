@@ -1,17 +1,17 @@
 package chess.model.piece;
 
 import chess.model.piece.IPiece;
+import grid.Location;
 
 import java.awt.Color;
 
-public class Piece implements IPiece {
+public abstract class Piece implements IPiece {
 
-    private Color color;
+    private Color color; // white or black
     private boolean killed = false;
 
     public Piece (Color color) {
         this.color = color;
-
     }
 
     @Override

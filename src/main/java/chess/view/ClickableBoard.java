@@ -15,7 +15,7 @@ public class ClickableBoard extends JPanel {
     private Color color;
 
     public ClickableBoard() {
-        this.board = new ChessBoard(8,8, null);
+        this.board = new ChessBoard(8,8,null);
 
         int rows = board.numRows();
         int columns = board.numColumns();
@@ -43,5 +43,4 @@ public class ClickableBoard extends JPanel {
         }
         // update GUI();
     }
-
 }
