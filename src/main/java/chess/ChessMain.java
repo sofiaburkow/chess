@@ -17,6 +17,5 @@ public class ChessMain {
 
         frame.pack();
         frame.setVisible(true);
-
     }
 }

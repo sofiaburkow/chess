@@ -18,7 +18,7 @@ public abstract class Piece implements IPiece {
 
     @Override
     public boolean isWhite() {
-        return this.color == Color.white;
+        return this.color == Color.WHITE;
     }
 
     @Override

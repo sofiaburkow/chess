@@ -15,7 +15,6 @@ public class ClickableBoard extends JPanel {
     private ChessBoard board;
 
     private Color color;
-    private Pieces piece;
 
     public ClickableBoard() {
         this.board = new ChessBoard(8,8,null);
@@ -40,13 +39,13 @@ public class ClickableBoard extends JPanel {
             }
 
             if (board.get(loc) == null) {
-                Pieces piece = null;
+                GamePanel pan = new GamePanel(color, null, null);
+                this.add(pan);
             }
             else {
-                Pieces piece = board.get(loc).piece.getPiece();
+                GamePanel pan = new GamePanel(color, board.get(loc).piece.getPiece(), board.get(loc).getColor());
+                this.add(pan);
             }
-            GamePanel pan = new GamePanel(color, piece);
-            this.add(pan);
 
             //clickablePanels.set(loc, pan);
         }

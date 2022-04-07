@@ -3,6 +3,7 @@ package chess.model;
 import chess.model.piece.Piece;
 import chess.model.piece.Pieces;
 
+import java.awt.*;
 import java.util.Objects;
 
 public class Tile {
@@ -16,5 +17,15 @@ public class Tile {
 
     public Pieces getPiece() {
         return piece.getPiece();
+    }
+
+    /**
+     * @return the initial of the color
+     */
+    public String getColor() {
+        if (piece.isWhite()) {
+            return "W";
+        }
+        return "B";
     }
 }
