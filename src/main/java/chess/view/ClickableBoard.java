@@ -1,6 +1,8 @@
 package chess.view;
 
 import chess.model.ChessBoard;
+import chess.model.piece.Piece;
+import chess.model.piece.Pieces;
 import grid.Grid;
 import grid.Location;
 
@@ -13,6 +15,7 @@ public class ClickableBoard extends JPanel {
     private ChessBoard board;
 
     private Color color;
+    private Pieces piece;
 
     public ClickableBoard() {
         this.board = new ChessBoard(8,8,null);
@@ -27,7 +30,6 @@ public class ClickableBoard extends JPanel {
 
     private void makeClickablePanels() {
         for (Location loc : board.locations()) {
-
             if ((loc.row + loc.col) % 2 == 0) {
                 // beige
                 color = new Color(255, 204, 130);
@@ -37,10 +39,25 @@ public class ClickableBoard extends JPanel {
                 color = new Color(156, 103, 50);
             }
 
-            GamePanel pan = new GamePanel(color);
-            //clickablePanels.set(loc, pan);
+            if (board.get(loc) == null) {
+                Pieces piece = null;
+            }
+            else {
+                Pieces piece = board.get(loc).piece.getPiece();
+            }
+            GamePanel pan = new GamePanel(color, piece);
             this.add(pan);
+
+            //clickablePanels.set(loc, pan);
         }
         // update GUI();
     }
+
+    private void placePiecesOnBoard() {
+
+
+
+    }
+
+
 }

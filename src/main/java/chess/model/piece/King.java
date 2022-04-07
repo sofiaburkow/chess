@@ -9,4 +9,9 @@ public class King extends Piece {
         super(color);
     }
 
+    @Override
+    public Pieces getPiece() {
+        return Pieces.KING;
+    }
+
 }

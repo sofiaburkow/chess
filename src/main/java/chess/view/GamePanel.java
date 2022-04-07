@@ -1,5 +1,8 @@
 package chess.view;
 
+import chess.model.piece.Piece;
+import chess.model.piece.Pieces;
+
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,9 +12,14 @@ public class GamePanel extends JPanel implements MouseListener {
 
     Color color;
     private boolean mouseIsHere = false;
+    private Pieces piece;
 
-    public GamePanel(Color color) {
+    // beginning of path for img
+    private String defaultPieceImagePath = "art/pieces/";
+
+    public GamePanel(Color color, Pieces piece) {
         this.color = color;
+        this.piece = piece;
         this.addMouseListener(this);
     }
 
@@ -21,6 +29,11 @@ public class GamePanel extends JPanel implements MouseListener {
 
         g.setColor(this.mouseIsHere ? color.darker() : color);
         g.fillRect(0,0,this.getWidth(), this.getHeight());
+
+        if (piece != null) {
+            System.out.println("jada");
+        }
+
     }
 
     // TODO: why deprecated method

@@ -7,12 +7,14 @@ import java.awt.Color;
 
 public abstract class Piece implements IPiece {
 
-    private Color color; // white or black
-    private boolean killed = false;
+    protected Color color; // white or black
+    protected boolean killed = false;
 
     public Piece (Color color) {
         this.color = color;
     }
+
+    public abstract Pieces getPiece();
 
     @Override
     public boolean isWhite() {
