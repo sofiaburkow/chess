@@ -1,6 +1,7 @@
 package chess.view;
 
 import chess.model.ChessBoard;
+import chess.model.ChessModel;
 import chess.model.piece.Piece;
 import chess.model.piece.Pieces;
 import grid.Grid;
@@ -12,12 +13,12 @@ import java.awt.*;
 public class ClickableBoard extends JPanel {
 
     private Grid<GamePanel> clickablePanels;
-    private ChessBoard board;
+    private ChessModel board;
 
     private Color color;
 
-    public ClickableBoard() {
-        this.board = new ChessBoard(8,8,null);
+    public ClickableBoard(ChessModel board) {
+        this.board = board;
 
         int rows = board.numRows();
         int columns = board.numColumns();

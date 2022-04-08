@@ -1,9 +1,6 @@
 package chess.model;
 
-import chess.model.piece.King;
-import chess.model.piece.Knight;
-import chess.model.piece.Piece;
-import chess.model.piece.Rook;
+import grid.GridLocationIterator;
 import grid.Location;
 
 import java.awt.*;
@@ -12,9 +9,27 @@ public class ChessModel {
 
     private ChessBoard board;
 
-    private Graphics graphics;
+    //private Graphics graphics;
 
     public ChessModel () {
         this.board = new ChessBoard(8,8, null);
+        board.initiateBoard();
     }
+
+    public Tile get(Location location) {
+        return board.get(location);
+    }
+
+    public int numRows() {
+        return board.numRows();
+    }
+
+    public int numColumns() {
+        return board.numColumns();
+    }
+
+    public GridLocationIterator locations() {
+        return board.locations();
+    }
+
 }
