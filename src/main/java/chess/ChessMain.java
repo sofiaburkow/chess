@@ -1,7 +1,7 @@
 package chess;
 
 import chess.model.ChessModel;
-import chess.view.ClickableBoard;
+import chess.GUI.ClickableBoard;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

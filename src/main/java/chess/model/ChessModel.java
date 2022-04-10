@@ -20,6 +20,10 @@ public class ChessModel {
         return board.get(location);
     }
 
+    public void setTile(Location loc, Tile tile) {
+        board.set(loc, tile);
+    }
+
     public int numRows() {
         return board.numRows();
     }

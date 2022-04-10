@@ -22,7 +22,7 @@ public class Tile {
     /**
      * @return the initial of the color
      */
-    public String getColor() {
+    public String getPieceColor() {
         if (piece.isWhite()) {
             return "W";
         }
