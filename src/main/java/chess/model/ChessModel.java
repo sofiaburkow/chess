@@ -40,6 +40,10 @@ public class ChessModel {
         return board.locations();
     }
 
+    public boolean isOnBoard(Location loc) {
+        return board.isOnGrid(loc);
+    }
+
     /**
      * @return the player whose turn it is now
      */
