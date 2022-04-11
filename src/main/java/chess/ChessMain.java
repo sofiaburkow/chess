@@ -21,5 +21,9 @@ public class ChessMain {
 
         frame.pack();
         frame.setVisible(true);
+
+        // Centers the window on the screen
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 }

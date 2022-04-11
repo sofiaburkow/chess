@@ -20,10 +20,6 @@ public class ClickableBoard extends JPanel {
     private ChessModel board;
 
     /**
-     * Location of panel most recently clicked.
-     */
-    private Location clickablePanel = null;
-    /**
      * Locations of panels which have been selected.
      */
     private List<Location> selectedPanels;
@@ -33,7 +29,7 @@ public class ClickableBoard extends JPanel {
      */
     private boolean confirmMove;
 
-    private Color color;
+    private Color tileColor;
 
     public ClickableBoard(ChessModel board) {
         this.board = board;
@@ -45,10 +41,11 @@ public class ClickableBoard extends JPanel {
         clickablePanels = new Grid<>(rows,columns);
         selectedPanels = new ArrayList<>();
         this.setLayout(new GridLayout(rows,columns));
-        this.setBorder(BorderFactory.createEmptyBorder(50,  350,50,350));
+
         makeClickablePanels();
 
-        // TODO: set GUI options
+        // set borders
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20 ,20,20));
     }
 
     /**
@@ -58,14 +55,14 @@ public class ClickableBoard extends JPanel {
     public void updateGui() {
         for (Location loc : board.locations()) {
             // TODO: is this the best way?
-            if (board.get(loc) != null) {
+            if (board.get(loc) == null) {
+                clickablePanels.get(loc).setPiece(null);
+                clickablePanels.get(loc).setPieceColor(null);
+            } else {
                 Pieces piece = board.get(loc).getPiece();
                 String pieceColor = board.get(loc).getPieceColor();
-                clickablePanels.get(loc).setPiece(piece, pieceColor);
-            } else {
-                Pieces piece = null;
-                String pieceColor = null;
-                clickablePanels.get(loc).setPiece(null, null);
+                clickablePanels.get(loc).setPiece(piece);
+                clickablePanels.get(loc).setPieceColor(pieceColor);
             }
         }
         validate();
@@ -76,13 +73,13 @@ public class ClickableBoard extends JPanel {
         for (Location loc : board.locations()) {
             if ((loc.row + loc.col) % 2 == 0) {
                 // beige
-                color = new Color(255, 204, 130);
+                tileColor = new Color(255, 204, 130);
             }
             else {
                 // brown
-                color = new Color(156, 103, 50);
+                tileColor = new Color(156, 103, 50);
             }
-            TilePanel pan = new TilePanel(adapter, color);
+            TilePanel pan = new TilePanel(adapter, tileColor);
             clickablePanels.set(loc, pan);
             add(pan);
         }
@@ -104,17 +101,6 @@ public class ClickableBoard extends JPanel {
         panel.setSelected(true);
         Location panelLocation = clickablePanels.locationOf(panel);
         selectedPanels.add(panelLocation);
-
-        // TODO:  make this more pretty
-        if (selectedPanels.size() == 2) {
-            Location initialLocation = selectedPanels.get(0);
-            Tile tile = board.get(initialLocation);
-            board.setTile(initialLocation, null);
-            Location finalLocation = selectedPanels.get(1);
-            board.setTile(finalLocation, tile);
-
-            deselectPanels();
-        }
     }
 
     /**
@@ -126,6 +112,16 @@ public class ClickableBoard extends JPanel {
             clickablePanels.get(loc).setSelected(false);
         }
         selectedPanels.clear();
+    }
+
+    public void movePiece() {
+        Location initialLocation = selectedPanels.get(0);
+        Location finalLocation = selectedPanels.get(1);
+        Tile tile = board.get(initialLocation);
+        board.setTile(initialLocation, null);
+        board.setTile(finalLocation, tile);
+
+        deselectPanels();
     }
 
     class ClickableBoardListener extends MouseAdapter {
@@ -147,6 +143,12 @@ public class ClickableBoard extends JPanel {
                         deselectPanels();
                         confirmMove = false;
                     }
+
+                    // Move the piece
+                    if (selectedPanels.size() == 2) {
+                        movePiece();
+                    }
+
                     updateGui();
 
                 } catch (Exception e) {

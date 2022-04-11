@@ -3,9 +3,8 @@ package chess.GUI;
 import chess.model.piece.Pieces;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
@@ -13,19 +12,18 @@ import java.io.IOException;
 public class TilePanel extends JPanel {
 
     private Color tileColor;
-    private boolean isSelected;
-    private Pieces piece; // TODO: do i need to write null?
+    private Pieces piece;
     private String pieceColor;
+    private boolean isSelected;
 
-    // beginning of path of image
-    private String defaultPieceImagePath = "art/pieces/";
+    // path to image
+    private String pieceImagePath = "art/pieces/";
 
     public TilePanel(MouseListener listener, Color tileColor) {
         this.tileColor = tileColor;
         this.piece = null;
-        //setEnabled(true); //??
-        //this.pieceColor = pieceColor;
-
+        this.pieceColor = null;
+        setPreferredSize(new Dimension(100, 100));
         // add mouse listener which calls click method
         addMouseListener(listener);
     }
@@ -39,32 +37,29 @@ public class TilePanel extends JPanel {
 
         if (piece != null) {
             try {
-                Image image = ImageIO.read(new File(defaultPieceImagePath+pieceColor+piece+".gif"));
-                g.drawImage(image, 20, 20, this); // TODO: more general dimensions
+                Image image = ImageIO.read(new File(pieceImagePath+pieceColor+piece+".gif"));
+                int width = this.getWidth()/2-image.getWidth(this)/2;
+                int height = this.getHeight()/2-image.getHeight(this)/2;
+                g.drawImage(image, width, height, this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        /*
-        if (isSelected) {
-            g.setColor(this.tileColor);
-            g.fillRect(0,0, this.getWidth(), this.getHeight());
-        }
-         */
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(100, 100);
     }
 
     /**
-     * Sets the color of this panel.
-     * When the updateUI function is called the
-     * color will be changed to this color.
+     * Sets the piece of this panel.
+     * The piece will change when the updateGUI function is called.
      */
-    public void setPiece(Pieces piece, String pieceColor) {
+    public void setPiece(Pieces piece) {
         this.piece = piece;
+    }
+
+    /**
+     * Sets the color og the piece of this panel.
+     * The color will change when the updateGUI function is called.
+     */
+    public void setPieceColor(String pieceColor) {
         this.pieceColor = pieceColor;
     }
 
