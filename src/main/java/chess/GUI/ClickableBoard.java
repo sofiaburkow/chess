@@ -1,8 +1,9 @@
 package chess.GUI;
 
 import chess.model.ChessModel;
+import chess.model.Player;
 import chess.model.Tile;
-import chess.model.piece.Pieces;
+import chess.model.piece.Type;
 import grid.Grid;
 import grid.Location;
 
@@ -19,6 +20,8 @@ public class ClickableBoard extends JPanel {
     private Grid<TilePanel> clickablePanels;
     private ChessModel board;
 
+    private Player currentPlayer;
+
     /**
      * Locations of panels which have been selected.
      */
@@ -33,6 +36,7 @@ public class ClickableBoard extends JPanel {
 
     public ClickableBoard(ChessModel board) {
         this.board = board;
+        this.currentPlayer = board.getCurrentPlayer();
         adapter = new ClickableBoardListener();
 
         // create clickable panels
@@ -55,12 +59,12 @@ public class ClickableBoard extends JPanel {
     public void updateGui() {
         for (Location loc : board.locations()) {
             // TODO: is this the best way?
-            if (board.get(loc) == null) {
+            if (board.getTile(loc) == null) {
                 clickablePanels.get(loc).setPiece(null);
                 clickablePanels.get(loc).setPieceColor(null);
             } else {
-                Pieces piece = board.get(loc).getPiece();
-                String pieceColor = board.get(loc).getPieceColor();
+                Type piece = board.getTile(loc).getPiece();
+                String pieceColor = board.getTile(loc).getPieceColor();
                 clickablePanels.get(loc).setPiece(piece);
                 clickablePanels.get(loc).setPieceColor(pieceColor);
             }
@@ -117,11 +121,25 @@ public class ClickableBoard extends JPanel {
     public void movePiece() {
         Location initialLocation = selectedPanels.get(0);
         Location finalLocation = selectedPanels.get(1);
-        Tile tile = board.get(initialLocation);
+        Tile tile = board.getTile(initialLocation);
         board.setTile(initialLocation, null);
         board.setTile(finalLocation, tile);
 
         deselectPanels();
+    }
+
+    public boolean validSourceTile(Location loc) {
+        if (board.getTile(loc) == null) {
+            return false;
+        }
+        if (board.getTile(loc).piece.getPlayer() != currentPlayer) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validDestinationTile() {
+        return false; // TODO: in model class
     }
 
     class ClickableBoardListener extends MouseAdapter {
@@ -134,19 +152,31 @@ public class ClickableBoard extends JPanel {
                     TilePanel currentPanel = (TilePanel) me.getSource();
                     Location currentLocation = clickablePanels.locationOf(currentPanel);
                     // check if panel has been previously selected
+
                     if (selectedPanels.contains(currentLocation)) {
                         confirmMove = true;
                     }
-                    setSelected(currentPanel);
+
+                    if (selectedPanels.size() == 0) {
+                        if (validSourceTile(currentLocation)) {
+                            setSelected(currentPanel);
+                        }
+                    } else if (selectedPanels.size() == 1) {
+                        if (board.getTile(currentLocation) == null) {
+                            setSelected(currentPanel);
+                            movePiece();
+                            currentPlayer = board.nextPlayer();
+                        }
+                        else if (board.getTile(currentLocation).piece.getPlayer() != currentPlayer) {
+                            setSelected(currentPanel);
+                            movePiece();
+                            currentPlayer = board.nextPlayer();
+                        }
+                    }
 
                     if (confirmMove) {
                         deselectPanels();
                         confirmMove = false;
-                    }
-
-                    // Move the piece
-                    if (selectedPanels.size() == 2) {
-                        movePiece();
                     }
 
                     updateGui();

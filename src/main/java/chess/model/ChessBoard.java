@@ -15,7 +15,7 @@ public class ChessBoard extends Grid<Tile> {
     /**
      * Create a standard chess board.
      */
-    public void initiateBoard() {
+    public void initializeBoard() {
         // black pieces
         this.set(new Location(0,0), new Tile(new Rook(Color.BLACK)));
         this.set(new Location(0,1), new Tile(new Knight(Color.BLACK)));
@@ -53,6 +53,10 @@ public class ChessBoard extends Grid<Tile> {
         this.set(new Location(7,5), new Tile(new Bishop(Color.WHITE)));
         this.set(new Location(7,6), new Tile(new Knight(Color.WHITE)));
         this.set(new Location(7,7), new Tile(new Rook(Color.WHITE)));
+    }
+
+    public void resetBoard() {
+        this.initializeBoard();
     }
 
 }

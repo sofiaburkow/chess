@@ -1,5 +1,13 @@
 package chess.model.piece;
 
+import chess.model.ChessModel;
+import chess.model.Player;
+import chess.model.Tile;
+import grid.Location;
+
+import java.awt.*;
+import java.util.List;
+
 public interface IPiece {
 
     /**
@@ -10,27 +18,27 @@ public interface IPiece {
     boolean isWhite();
 
     /**
-     * Sets the color of the piece to white.
+     * @return whether the given piece is on the white or black team.
      */
-    void setWhite();
+    Player getPlayer();
 
     /**
-     * Check if the piece is still in the game or not.
+     * @return the type of the given piece.
+     */
+    Type getPiece();
+
+    /**
+     * List of possible moves according to the state of the board and the given piece.
      *
-     * @return true if killed, return false if the piece is still alive.
+     * @return list of possible end locations.
      */
-    boolean isKilled();
-
-    /**
-     * Sets the state of the given piece to killed.
-     */
-    void setKilled();
+    List<Location> getPossibleMoves(ChessModel board, Location start);
 
     /**
      * Checks whether a given move is valid or not.
      *
-     * @return true if the move is valid, if not valid then return false.
+     * @return true if move is valid, otherwise false.
      */
-    boolean isValidMove();
+    boolean canMove(ChessModel board, Location start, Location end);
 
 }

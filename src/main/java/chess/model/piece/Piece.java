@@ -1,20 +1,20 @@
 package chess.model.piece;
 
-import chess.model.piece.IPiece;
+import chess.model.ChessModel;
+import chess.model.Player;
+import chess.model.Tile;
 import grid.Location;
 
 import java.awt.Color;
+import java.util.List;
 
 public abstract class Piece implements IPiece {
 
-    protected Color color; // white or black
-    protected boolean killed = false;
+    protected Color color;
 
     public Piece (Color color) {
         this.color = color;
     }
-
-    public abstract Pieces getPiece();
 
     @Override
     public boolean isWhite() {
@@ -22,24 +22,19 @@ public abstract class Piece implements IPiece {
     }
 
     @Override
-    public void setWhite() {
-        // a check
-        this.color = Color.white;
+    public Player getPlayer() {
+        if (isWhite()) {
+            return Player.WHITE;
+        }
+        return Player.BLACK;
     }
 
     @Override
-    public boolean isKilled() {
-        return this.killed;
-    }
+    public abstract Type getPiece();
 
     @Override
-    public void setKilled() {
-        // a check
-        this.killed = true;
-    }
+    public abstract List<Location> getPossibleMoves(ChessModel board, Location start);
 
     @Override
-    public boolean isValidMove() {
-        return false;
-    }
+    public abstract boolean canMove(ChessModel board, Location start, Location end);
 }

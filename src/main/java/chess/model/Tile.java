@@ -1,10 +1,7 @@
 package chess.model;
 
 import chess.model.piece.Piece;
-import chess.model.piece.Pieces;
-
-import java.awt.*;
-import java.util.Objects;
+import chess.model.piece.Type;
 
 public class Tile {
 
@@ -15,7 +12,7 @@ public class Tile {
         this.piece = piece;
     }
 
-    public Pieces getPiece() {
+    public Type getPiece() {
         return piece.getPiece();
     }
 

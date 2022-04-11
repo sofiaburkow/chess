@@ -3,18 +3,24 @@ package chess.model;
 import grid.GridLocationIterator;
 import grid.Location;
 
-import java.awt.*;
+import java.util.ArrayList;
 
 public class ChessModel {
 
     private ChessBoard board;
+    private ArrayList<Player> players;
+    private int currentIndex;
 
     public ChessModel () {
         this.board = new ChessBoard(8,8, null);
-        board.initiateBoard();
+        players = new ArrayList<>(2);
+        players.add(Player.WHITE);
+        players.add(Player.BLACK);
+        currentIndex = 0;
+        board.initializeBoard();
     }
 
-    public Tile get(Location location) {
+    public Tile getTile(Location location) {
         return board.get(location);
     }
 
@@ -32,6 +38,21 @@ public class ChessModel {
 
     public GridLocationIterator locations() {
         return board.locations();
+    }
+
+    /**
+     * @return the player whose turn it is now
+     */
+    public Player getCurrentPlayer() {
+        return players.get(currentIndex);
+    }
+
+    /**
+     * advances the list of players to the next player
+     */
+    public Player nextPlayer() {
+        currentIndex = (currentIndex+1) % 2;
+        return getCurrentPlayer();
     }
 
 }

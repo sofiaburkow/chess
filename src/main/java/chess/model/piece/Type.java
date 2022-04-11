@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-public enum Pieces {
+public enum Type {
     PAWN,
     ROOK,
     KNIGHT,

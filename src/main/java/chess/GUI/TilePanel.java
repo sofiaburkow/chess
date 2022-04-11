@@ -1,6 +1,6 @@
 package chess.GUI;
 
-import chess.model.piece.Pieces;
+import chess.model.piece.Type;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class TilePanel extends JPanel {
 
     private Color tileColor;
-    private Pieces piece;
+    private Type piece;
     private String pieceColor;
     private boolean isSelected;
 
@@ -51,7 +51,7 @@ public class TilePanel extends JPanel {
      * Sets the piece of this panel.
      * The piece will change when the updateGUI function is called.
      */
-    public void setPiece(Pieces piece) {
+    public void setPiece(Type piece) {
         this.piece = piece;
     }
 
