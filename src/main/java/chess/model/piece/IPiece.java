@@ -23,6 +23,11 @@ public interface IPiece {
     Player getPlayer();
 
     /**
+     * @return the initials of the color of the piece.
+     */
+    String getPieceColor();
+
+    /**
      * @return the type of the given piece.
      */
     Type getPiece();

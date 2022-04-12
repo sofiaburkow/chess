@@ -32,6 +32,9 @@ public class Pawn extends Piece {
         return moves;
     }
 
+    /**
+     * Add valid moves to the list of possible moves where the pawn advances on the board.
+     */
     private void getAdvanceMoves(ChessModel board, Location loc, List<Location> moves) {
         int move;
         if (isWhite()) {
@@ -41,19 +44,22 @@ public class Pawn extends Piece {
         }
         Location advanceOne = new Location(loc.row+move, loc.col);
         if (board.isOnBoard(advanceOne)) {
-            if (board.getTile(advanceOne) != null) {
+            if (board.getTile(advanceOne) == null) {
                 moves.add(advanceOne);
             }
         }
         // if the pawn has yet to move
         if ((isWhite() && loc.row == 6) || (!isWhite() && loc.row == 1) ) {
-            Location advanceTwo = new Location(loc.row+move, loc.col);
+            Location advanceTwo = new Location(loc.row+move*2, loc.col);
             if (board.isOnBoard(advanceTwo) && (board.getTile(advanceTwo) == null)) {
                 moves.add(advanceTwo);
             }
         }
     }
 
+    /**
+     * Add moves where the pawn captures an opponents piece to the list of possible moves.
+     */
     private void getCaptureMoves(ChessModel board, Location loc, List<Location> moves) {
         int move;
         if (isWhite()) {

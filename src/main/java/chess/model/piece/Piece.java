@@ -30,6 +30,14 @@ public abstract class Piece implements IPiece {
     }
 
     @Override
+    public String getPieceColor() {
+        if (isWhite()) {
+            return "W";
+        }
+        return "B";
+    }
+
+    @Override
     public abstract Type getPiece();
 
     @Override

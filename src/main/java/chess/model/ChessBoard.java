@@ -59,4 +59,10 @@ public class ChessBoard extends Grid<Tile> {
         this.initializeBoard();
     }
 
+    public void movePiece(Location from, Location to) {
+        Tile sourceTile = this.get(from);
+        this.set(from, null);
+        this.set(to, sourceTile);
+    }
+
 }
