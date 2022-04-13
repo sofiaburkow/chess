@@ -41,7 +41,7 @@ public abstract class Piece implements IPiece {
     public abstract Type getPiece();
 
     @Override
-    public abstract List<Location> getPossibleMoves(ChessModel board, Location start);
+    public abstract List<Location> getValidMoves(ChessModel board, Location start);
 
     @Override
     public abstract boolean canMove(ChessModel board, Location start, Location end);

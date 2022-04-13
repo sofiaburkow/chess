@@ -22,7 +22,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Location> getPossibleMoves(ChessModel board, Location start) {
+    public List<Location> getValidMoves(ChessModel board, Location start) {
 
         List<Location> moves = new ArrayList<>();
 
@@ -87,8 +87,7 @@ public class Pawn extends Piece {
 
     @Override
     public boolean canMove(ChessModel board, Location start, Location end) {
-        List<Location> possibleMoves = getPossibleMoves(board, start);
-        if (possibleMoves.contains(end)) {
+        if (getValidMoves(board, start).contains(end)) {
             return true;
         }
         return false;

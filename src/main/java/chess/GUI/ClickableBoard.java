@@ -18,7 +18,7 @@ public class ClickableBoard extends JPanel {
 
     private MouseAdapter adapter;
     private Grid<TilePanel> clickablePanels;
-    private ChessModel board;
+    private IMovable board;
 
     private Player currentPlayer;
 
@@ -34,7 +34,7 @@ public class ClickableBoard extends JPanel {
 
     private Color tileColor;
 
-    public ClickableBoard(ChessModel board) {
+    public ClickableBoard(IMovable board) {
         this.board = board;
         this.currentPlayer = board.getCurrentPlayer();
         adapter = new ClickableBoardListener();
@@ -162,14 +162,10 @@ public class ClickableBoard extends JPanel {
                             setSelected(currentPanel);
                         }
                     } else if (selectedPanels.size() == 1) {
-                        if (board.getTile(currentLocation) == null) {
+                        if (board.validMove(selectedPanels.get(0), currentLocation)) {
                             setSelected(currentPanel);
-                            movePiece();
-                            currentPlayer = board.nextPlayer();
-                        }
-                        else if (board.getTile(currentLocation).piece.getPlayer() != currentPlayer) {
-                            setSelected(currentPanel);
-                            movePiece();
+                            board.movePiece(selectedPanels.get(0), selectedPanels.get(1));
+                            deselectPanels();
                             currentPlayer = board.nextPlayer();
                         }
                     }

@@ -24,7 +24,7 @@ public class PawnTest {
     void pawnAtStartingPositionMoves() {
         ChessModel board = new ChessModel();
         Location pawnLocation = new Location(1,3);
-        List<Location> moves = board.getTile(pawnLocation).piece.getPossibleMoves(board,pawnLocation);
+        List<Location> moves = board.getTile(pawnLocation).piece.getValidMoves(board,pawnLocation);
 
         List<Location> trueMoves = new ArrayList<>();
         trueMoves.add(new Location(2,3));
@@ -44,7 +44,7 @@ public class PawnTest {
         board.setTile(oldPawnLocation, null);
         board.setTile(newPawnLocation, pawnTile);
 
-        List<Location> moves = board.getTile(newPawnLocation).piece.getPossibleMoves(board,newPawnLocation);
+        List<Location> moves = board.getTile(newPawnLocation).piece.getValidMoves(board,newPawnLocation);
 
         List<Location> trueMoves = new ArrayList<>();
         trueMoves.add(new Location(3,3));

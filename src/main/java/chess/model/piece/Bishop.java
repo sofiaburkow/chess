@@ -19,7 +19,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Location> getPossibleMoves(ChessModel board, Location start) {
+    public List<Location> getValidMoves(ChessModel board, Location start) {
         return null;
     }
 

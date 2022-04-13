@@ -37,7 +37,7 @@ public interface IPiece {
      *
      * @return list of possible end locations.
      */
-    List<Location> getPossibleMoves(ChessModel board, Location start);
+    List<Location> getValidMoves(ChessModel board, Location start);
 
     /**
      * Checks whether a given move is valid or not.
