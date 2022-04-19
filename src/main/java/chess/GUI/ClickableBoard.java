@@ -18,7 +18,7 @@ public class ClickableBoard extends JPanel {
 
     private MouseAdapter adapter;
     private Grid<TilePanel> clickablePanels;
-    private IMovable board;
+    private ChessModel board;
 
     private Player currentPlayer;
 
@@ -27,6 +27,8 @@ public class ClickableBoard extends JPanel {
      */
     private List<Location> selectedPanels;
 
+    private List<Location> possibleMoves;
+
     /**
      * Boolean used to confirm double click of a panel to deselect all panels.
      */
@@ -34,7 +36,7 @@ public class ClickableBoard extends JPanel {
 
     private Color tileColor;
 
-    public ClickableBoard(IMovable board) {
+    public ClickableBoard(ChessModel board) {
         this.board = board;
         this.currentPlayer = board.getCurrentPlayer();
         adapter = new ClickableBoardListener();
@@ -44,6 +46,7 @@ public class ClickableBoard extends JPanel {
         int columns = board.numColumns();
         clickablePanels = new Grid<>(rows,columns);
         selectedPanels = new ArrayList<>();
+        possibleMoves = new ArrayList<>();
         this.setLayout(new GridLayout(rows,columns));
 
         makeClickablePanels();
@@ -107,6 +110,12 @@ public class ClickableBoard extends JPanel {
         selectedPanels.add(panelLocation);
     }
 
+    public void setPossibleMove(TilePanel panel) {
+        panel.setPossibleMove(true);
+        Location panelLocation = clickablePanels.locationOf(panel);
+        possibleMoves.add(panelLocation);
+    }
+
     /**
      * Iterate through all selected panels and deselect.
      * Clear list of selected panels.
@@ -116,16 +125,10 @@ public class ClickableBoard extends JPanel {
             clickablePanels.get(loc).setSelected(false);
         }
         selectedPanels.clear();
-    }
-
-    public void movePiece() {
-        Location initialLocation = selectedPanels.get(0);
-        Location finalLocation = selectedPanels.get(1);
-        Tile tile = board.getTile(initialLocation);
-        board.setTile(initialLocation, null);
-        board.setTile(finalLocation, tile);
-
-        deselectPanels();
+        for (Location loc : possibleMoves) {
+            clickablePanels.get(loc).setPossibleMove(false);
+        }
+        possibleMoves.clear();
     }
 
     public boolean validSourceTile(Location loc) {
@@ -138,10 +141,6 @@ public class ClickableBoard extends JPanel {
         return true;
     }
 
-    public boolean validDestinationTile() {
-        return false; // TODO: in model class
-    }
-
     class ClickableBoardListener extends MouseAdapter {
 
         // This is what happens when the mouse clicks on one of the squares of the grid.
@@ -152,7 +151,6 @@ public class ClickableBoard extends JPanel {
                     TilePanel currentPanel = (TilePanel) me.getSource();
                     Location currentLocation = clickablePanels.locationOf(currentPanel);
                     // check if panel has been previously selected
-
                     if (selectedPanels.contains(currentLocation)) {
                         confirmMove = true;
                     }
@@ -160,6 +158,10 @@ public class ClickableBoard extends JPanel {
                     if (selectedPanels.size() == 0) {
                         if (validSourceTile(currentLocation)) {
                             setSelected(currentPanel);
+                            List<Location> moves = board.getTile(currentLocation).piece.getValidMoves(board,currentLocation);
+                            for (Location loc : moves) {
+                                setPossibleMove(clickablePanels.get(loc));
+                            }
                         }
                     } else if (selectedPanels.size() == 1) {
                         if (board.validMove(selectedPanels.get(0), currentLocation)) {

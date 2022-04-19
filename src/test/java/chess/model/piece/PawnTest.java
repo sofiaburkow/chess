@@ -2,7 +2,6 @@ package chess.model.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import chess.model.ChessBoard;
 import chess.model.ChessModel;
 import chess.model.Tile;
 import grid.Location;

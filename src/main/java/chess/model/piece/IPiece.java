@@ -40,6 +40,14 @@ public interface IPiece {
     List<Location> getValidMoves(ChessModel board, Location start);
 
     /**
+     *
+     * @return
+     */
+    boolean isValidMove(ChessModel board, Location loc);
+
+    void addMoves(ChessModel board, Location start, int rowOperand, int columnOperand, List<Location> moves);
+
+    /**
      * Checks whether a given move is valid or not.
      *
      * @return true if move is valid, otherwise false.

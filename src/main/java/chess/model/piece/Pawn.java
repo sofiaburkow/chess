@@ -85,12 +85,4 @@ public class Pawn extends Piece {
         }
     }
 
-    @Override
-    public boolean canMove(ChessModel board, Location start, Location end) {
-        if (getValidMoves(board, start).contains(end)) {
-            return true;
-        }
-        return false;
-    }
-
 }

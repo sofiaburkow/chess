@@ -1,10 +1,10 @@
 package chess.model.piece;
 
 import chess.model.ChessModel;
-import chess.model.Tile;
 import grid.Location;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rook extends Piece {
@@ -20,12 +20,14 @@ public class Rook extends Piece {
 
     @Override
     public List<Location> getValidMoves(ChessModel board, Location start) {
-        return null;
-    }
+        List<Location> validMoves = new ArrayList<>();
 
-    @Override
-    public boolean canMove(ChessModel board, Location start, Location end) {
-        return false;
+        addMoves(board, start, 1,0, validMoves);
+        addMoves(board, start, 0,1, validMoves);
+        addMoves(board, start, -1,0, validMoves);
+        addMoves(board, start, 0,-1, validMoves);
+
+        return validMoves;
     }
 
 }

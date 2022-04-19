@@ -5,6 +5,8 @@ import chess.model.Tile;
 import grid.Location;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class King extends Piece {
@@ -20,12 +22,14 @@ public class King extends Piece {
 
     @Override
     public List<Location> getValidMoves(ChessModel board, Location start) {
-        return null;
-    }
-
-    @Override
-    public boolean canMove(ChessModel board, Location start, Location end) {
-        return false;
+        List<Location> validMoves = new ArrayList<>();
+        Collection<Location> neighbors = start.allNeighbors();
+        for (Location loc : neighbors) {
+            if (isValidMove(board, loc)) {
+                validMoves.add(loc);
+            }
+        }
+        return validMoves;
     }
 
 }

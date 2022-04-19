@@ -44,5 +44,38 @@ public abstract class Piece implements IPiece {
     public abstract List<Location> getValidMoves(ChessModel board, Location start);
 
     @Override
-    public abstract boolean canMove(ChessModel board, Location start, Location end);
+    public boolean isValidMove(ChessModel board, Location loc) {
+        if (board.isOnBoard(loc)) {
+            if (board.getTile(loc) == null) {
+                return true;
+            } else if (board.getTile(loc).piece.isWhite() != isWhite()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addMoves(ChessModel board, Location start, int rowOperand, int columnOperand, List<Location> moves) {
+        for (int i = 1; i < board.numColumns(); i++) {
+            Location loc = new Location(start.row+rowOperand*i, start.col+columnOperand*i);
+            if (isValidMove(board, loc)) {
+                moves.add(loc);
+                // if it is of the opposite color
+                if (board.getTile(loc) != null) {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
+    @Override
+    public boolean canMove(ChessModel board, Location start, Location end) {
+        if (getValidMoves(board, start).contains(end)) {
+            return true;
+        }
+        return false;
+    }
+
 }

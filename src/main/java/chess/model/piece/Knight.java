@@ -26,15 +26,11 @@ public class Knight extends Piece {
 
         List<Location> validMoves = new ArrayList<>();
         for (Location loc : possibleMoves) {
-            if (board.isOnBoard(loc)) {
-                if (board.getTile(loc) == null) {
-                    validMoves.add(loc);
-                }
-                else if (board.getTile(loc).piece.isWhite() != isWhite()) {
-                    validMoves.add(loc);
-                }
+            if (isValidMove(board,loc)) {
+                validMoves.add(loc);
             }
         }
+
         return validMoves;
     }
 
@@ -52,14 +48,6 @@ public class Knight extends Piece {
         moves.add(new Location(start.row-2, start.col-1));
 
         return moves;
-    }
-
-    @Override
-    public boolean canMove(ChessModel board, Location start, Location end) {
-        if (getValidMoves(board, start).contains(end)) {
-            return true;
-        }
-        return false;
     }
 
 }

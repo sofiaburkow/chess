@@ -15,6 +15,7 @@ public class TilePanel extends JPanel {
     private Type piece;
     private String pieceColor;
     private boolean isSelected;
+    private boolean isPossibleMove;
 
     // path to image
     private String pieceImagePath = "art/pieces/";
@@ -34,6 +35,7 @@ public class TilePanel extends JPanel {
 
         g.setColor(this.isSelected ? this.tileColor.darker() : this.tileColor);
         g.fillRect(0,0, this.getWidth(), this.getHeight());
+        //g.setColor(this.isPossibleMove ? this.tileColor.darker() : this.tileColor);
 
         if (piece != null) {
             try {
@@ -44,6 +46,16 @@ public class TilePanel extends JPanel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        if (this.isPossibleMove) {
+            if (piece == null) {
+                g.setColor(Color.WHITE.darker());
+
+            } else {
+                g.setColor(Color.RED.darker());
+                //g.drawOval(10, 10, getWidth()-20, getHeight()-20);
+            }
+            g.fillOval(getWidth() / 2 - getWidth() / 14, getHeight() / 2 - getHeight() / 14, getWidth() / 7, getHeight() / 7);
         }
     }
 
@@ -66,4 +78,9 @@ public class TilePanel extends JPanel {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
+    public void setPossibleMove(boolean possibleMove) {
+        isPossibleMove = possibleMove;
+    }
+
 }
