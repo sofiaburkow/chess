@@ -165,7 +165,11 @@ public class ClickableBoard extends JPanel {
                         }
                     } else if (selectedPanels.size() == 1) {
                         if (board.getTile(currentLocation).isCastleMove()) {
-                            board.castleKingSideMove(selectedPanels.get(0));
+                            if (currentLocation.col == 6) {
+                                board.castleKingSideMove(selectedPanels.get(0));
+                            } else if (currentLocation.col == 2) {
+                                board.castleQueenSideMove(selectedPanels.get(0));
+                            }
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
                             deselectPanels();
                             currentPlayer = board.nextPlayer();

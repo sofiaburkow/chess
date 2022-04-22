@@ -40,7 +40,14 @@ public class King extends Piece {
                     moves.add(new Location(loc.row, loc.col + 2));
                     board.getTile(new Location(loc.row, loc.col+2)).setCastleMove(true);
                 }
-
+            }
+        }
+        if (!this.hasMovedBefore() && !board.getTile(new Location(loc.row, loc.col - 4)).isEmpty()) {
+            if (!board.getTile(new Location(loc.row, loc.col-4)).piece.hasMovedBefore()) {
+                if (board.getTile(new Location(loc.row, loc.col-1)).isEmpty() && board.getTile(new Location(loc.row, loc.col-2)).isEmpty() && board.getTile(new Location(loc.row, loc.col-3)).isEmpty()) {
+                    moves.add(new Location(loc.row, loc.col-2));
+                    board.getTile(new Location(loc.row, loc.col-2)).setCastleMove(true);
+                }
             }
         }
     }

@@ -40,17 +40,19 @@ public class Pawn extends Piece {
         } else {
             move = 1;
         }
-        Location advanceOne = new Location(loc.row+move, loc.col);
+        Location advanceOne = new Location(loc.row + move, loc.col);
         if (board.isOnBoard(advanceOne)) {
             if (board.getTile(advanceOne).isEmpty()) {
                 moves.add(advanceOne);
             }
         }
         // if the pawn has yet to move
-        if ((isWhite() && loc.row == 6) || (!isWhite() && loc.row == 1) ) {
-            Location advanceTwo = new Location(loc.row+move*2, loc.col);
-            if (board.isOnBoard(advanceTwo) && (board.getTile(advanceTwo).isEmpty())) {
-                moves.add(advanceTwo);
+        if ((isWhite() && loc.row == 6) || (!isWhite() && loc.row == 1)) {
+            Location advanceTwo = new Location(loc.row + move * 2, loc.col);
+            if (board.isOnBoard(advanceTwo)) {
+                if (board.getTile(new Location(loc.row + move * 1, loc.col)).isEmpty() && (board.getTile(advanceTwo).isEmpty())) {
+                    moves.add(advanceTwo);
+                }
             }
         }
     }
