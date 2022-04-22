@@ -11,9 +11,11 @@ import java.util.List;
 public abstract class Piece implements IPiece {
 
     protected Color color;
+    protected boolean hasMovedBefore;
 
-    public Piece (Color color) {
+    public Piece(Color color) {
         this.color = color;
+        this.hasMovedBefore = false;
     }
 
     @Override
@@ -46,9 +48,10 @@ public abstract class Piece implements IPiece {
     @Override
     public boolean isValidMove(ChessModel board, Location loc) {
         if (board.isOnBoard(loc)) {
-            if (board.getTile(loc) == null) {
+            if (board.getTile(loc).isEmpty()) {
                 return true;
-            } else if (board.getTile(loc).piece.isWhite() != isWhite()) {
+            }
+            if (board.getTile(loc).piece.isWhite() != isWhite()) {
                 return true;
             }
         }
@@ -61,9 +64,12 @@ public abstract class Piece implements IPiece {
             if (isValidMove(board, loc)) {
                 moves.add(loc);
                 // if it is of the opposite color
-                if (board.getTile(loc) != null) {
+                /*
+                if (board.getTile(loc).piece.getPiece() != null) {
                     break;
                 }
+
+                 */
             } else {
                 break;
             }
@@ -76,6 +82,16 @@ public abstract class Piece implements IPiece {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean hasMovedBefore() {
+        return hasMovedBefore;
+    }
+
+    @Override
+    public void setHasMovedBefore(boolean hasMovedBefore) {
+        this.hasMovedBefore = hasMovedBefore;
     }
 
 }

@@ -1,7 +1,6 @@
 package chess.model.piece;
 
 import chess.model.ChessModel;
-import chess.model.Tile;
 import grid.Location;
 
 import java.awt.*;

@@ -13,11 +13,13 @@ public class ChessModel implements IMovable {
     private int currentIndex;
 
     public ChessModel () {
-        this.board = new ChessBoard(8,8, null);
+        this.board = new ChessBoard(8,8, new Tile(null));
+
         players = new ArrayList<>(2);
         players.add(Player.WHITE);
         players.add(Player.BLACK);
         currentIndex = 0;
+
         board.initializeBoard();
     }
 
@@ -59,16 +61,21 @@ public class ChessModel implements IMovable {
 
     @Override
     public boolean validMove(Location source, Location destination) {
+        if (this.getTile(source).isEmpty()) {
+            return false;
+        }
         return this.getTile(source).piece.canMove(this, source, destination);
     }
 
     @Override
-    public void movePiece(Location source, Location destination) {
+    public boolean movePiece(Location source, Location destination) {
         if (validMove(source, destination)) {
             Tile sourceTile = this.getTile(source);
-            this.setTile(source, null);
+            this.setTile(source, new Tile(null));
             this.setTile(destination, sourceTile);
+            return true;
         }
+        return false;
     }
 
     public boolean isOnBoard(Location loc) {

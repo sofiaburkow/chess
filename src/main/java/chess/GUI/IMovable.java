@@ -1,12 +1,9 @@
 package chess.GUI;
 
-import chess.model.ChessModel;
 import chess.model.Player;
 import chess.model.Tile;
 import grid.GridLocationIterator;
 import grid.Location;
-
-import java.util.List;
 
 public interface IMovable {
 
@@ -35,6 +32,6 @@ public interface IMovable {
     /**
      * Move the piece from the source tile, to the destination tile.
      */
-    void movePiece(Location source, Location destination);
+    boolean movePiece(Location source, Location destination);
 
 }

@@ -5,11 +5,16 @@ import grid.Grid;
 import grid.Location;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChessBoard extends Grid<Tile> {
 
+    private List<Move> moveHistory;
+
     public ChessBoard(int rows, int cols, Tile element) {
         super(rows, cols, element);
+        this.moveHistory = new ArrayList<>();
     }
 
     /**
@@ -57,6 +62,14 @@ public class ChessBoard extends Grid<Tile> {
 
     public void resetBoard() {
         this.initializeBoard();
+    }
+
+    public List<Move> getMoveHistory() {
+        return this.moveHistory;
+    }
+
+    public void addMoveHistory(Move move) {
+        moveHistory.add(move);
     }
 
 }

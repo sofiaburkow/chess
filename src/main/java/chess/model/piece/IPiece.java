@@ -2,10 +2,8 @@ package chess.model.piece;
 
 import chess.model.ChessModel;
 import chess.model.Player;
-import chess.model.Tile;
 import grid.Location;
 
-import java.awt.*;
 import java.util.List;
 
 public interface IPiece {
@@ -53,5 +51,9 @@ public interface IPiece {
      * @return true if move is valid, otherwise false.
      */
     boolean canMove(ChessModel board, Location start, Location end);
+
+    boolean hasMovedBefore();
+
+    void setHasMovedBefore(boolean hasMovedBefore);
 
 }

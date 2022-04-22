@@ -1,5 +1,6 @@
 package chess.GUI;
 
+import chess.model.piece.IPiece;
 import chess.model.piece.Type;
 
 import javax.imageio.ImageIO;
@@ -14,10 +15,10 @@ public class TilePanel extends JPanel {
     private Color tileColor;
     private Type piece;
     private String pieceColor;
+
     private boolean isSelected;
     private boolean isPossibleMove;
 
-    // path to image
     private String pieceImagePath = "art/pieces/";
 
     public TilePanel(MouseListener listener, Color tileColor) {
@@ -32,11 +33,10 @@ public class TilePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        // draw the tile itself
         g.setColor(this.isSelected ? this.tileColor.darker() : this.tileColor);
         g.fillRect(0,0, this.getWidth(), this.getHeight());
-        //g.setColor(this.isPossibleMove ? this.tileColor.darker() : this.tileColor);
-
+        // draw image of piece
         if (piece != null) {
             try {
                 Image image = ImageIO.read(new File(pieceImagePath+pieceColor+piece+".gif"));
@@ -47,15 +47,14 @@ public class TilePanel extends JPanel {
                 e.printStackTrace();
             }
         }
+        // draw dots and circles according to where the piece can move
         if (this.isPossibleMove) {
+            g.setColor(new Color(142, 176, 119));
             if (piece == null) {
-                g.setColor(Color.WHITE.darker());
-
+                g.fillOval(getWidth()/2-getWidth()/16, getHeight()/2-getHeight()/16, getWidth()/8, getHeight()/8);
             } else {
-                g.setColor(Color.RED.darker());
-                //g.drawOval(10, 10, getWidth()-20, getHeight()-20);
+                g.drawOval(5, 5, getWidth()-10, getHeight()-10);
             }
-            g.fillOval(getWidth() / 2 - getWidth() / 14, getHeight() / 2 - getHeight() / 14, getWidth() / 7, getHeight() / 7);
         }
     }
 
