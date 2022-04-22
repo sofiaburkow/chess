@@ -82,4 +82,15 @@ public class ChessModel implements IMovable {
         return board.isOnGrid(loc);
     }
 
+    public void castleKingSideMove(Location source) {
+        Tile kingTile = this.getTile(source);
+        this.setTile(new Location(source.row, source.col+2), kingTile);
+        this.setTile(source, new Tile(null));
+
+        Tile rookTile = this.getTile(new Location(source.row, source.col+3));
+        this.setTile(new Location(source.row, source.col+3), new Tile(null));
+        this.setTile(new Location(source.row, source.col+1), rookTile);
+
+    }
+
 }

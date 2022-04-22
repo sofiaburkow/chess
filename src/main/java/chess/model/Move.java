@@ -1,5 +1,7 @@
 package chess.model;
 
+import grid.Location;
+
 public class Move {
 
     boolean castle;

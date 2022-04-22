@@ -134,17 +134,13 @@ public class ClickableBoard extends JPanel {
     }
 
     public boolean validSourceTile(Location loc) {
-        if (board.getTile(loc).isEmpty()) {
+        if (board.getTile(loc).isEmpty() || board.getTile(loc).piece.getPlayer() != currentPlayer) {
             return false;
         }
-        else if (board.getTile(loc).piece.getPlayer() == currentPlayer) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     class ClickableBoardListener extends MouseAdapter {
-
         // This is what happens when the mouse clicks on one of the squares of the grid.
         @Override
         public void mousePressed(MouseEvent me) {
@@ -168,12 +164,14 @@ public class ClickableBoard extends JPanel {
                             }
                         }
                     } else if (selectedPanels.size() == 1) {
-                        if (board.movePiece(selectedPanels.get(0), currentLocation)) {
+                        if (board.getTile(currentLocation).isCastleMove()) {
+                            board.castleKingSideMove(selectedPanels.get(0));
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
-                            if (board.getTile(currentLocation).isCastleMove()) {
-                                System.out.println("here");
-                                board.movePiece(new Location(currentLocation.row, currentLocation.col+1), new Location(currentLocation.row, currentLocation.col-1));
-                            }
+                            deselectPanels();
+                            currentPlayer = board.nextPlayer();
+                        }
+                        else if (board.movePiece(selectedPanels.get(0), currentLocation)) {
+                            board.getTile(currentLocation).piece.setHasMovedBefore(true);
                             deselectPanels();
                             currentPlayer = board.nextPlayer();
                         }
