@@ -68,7 +68,7 @@ public class ChessBoard extends Grid<Tile> {
         return this.moveHistory;
     }
 
-    public void addMoveHistory(Move move) {
+    public void addMoveToMoveHistory(Move move) {
         moveHistory.add(move);
     }
 

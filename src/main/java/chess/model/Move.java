@@ -4,11 +4,15 @@ import grid.Location;
 
 public class Move {
 
-    boolean castle;
+    private Location source;
+    private Location destination;
+    boolean castleMove;
     boolean enPassant;
 
-    public Move(boolean castle, boolean enPassant) {
-        this.castle = castle;
+    public Move(Location source, Location destination, boolean castleMove, boolean enPassant) {
+        this.source = source;
+        this.destination = destination;
+        this.castleMove = castleMove;
         this.enPassant = enPassant;
     }
 
@@ -16,8 +20,7 @@ public class Move {
         return enPassant;
     }
 
-    public boolean canCastle() {
-        return castle;
+    public boolean isCastleMove() {
+        return castleMove;
     }
-
 }
