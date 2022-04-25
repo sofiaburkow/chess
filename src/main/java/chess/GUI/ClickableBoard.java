@@ -1,6 +1,7 @@
 package chess.GUI;
 
 import chess.model.ChessModel;
+import chess.model.Move;
 import chess.model.Player;
 import grid.Grid;
 import grid.Location;
@@ -148,22 +149,22 @@ public class ClickableBoard extends JPanel {
                 try {
                     TilePanel currentPanel = (TilePanel) me.getSource();
                     Location currentLocation = clickablePanels.locationOf(currentPanel);
-
                     // check if panel has been previously selected
                     if (selectedPanels.contains(currentLocation)) {
                         confirmMove = true;
                     }
-
                     if (selectedPanels.size() == 0) {
                         if (validSourceTile(currentLocation)) {
                             setSelected(currentPanel);
-                            // show valid moves
-                            List<Location> moves = board.getTile(currentLocation).piece.getValidMoves(board,currentLocation);
-                            for (Location loc : moves) {
-                                setPossibleMove(clickablePanels.get(loc));
+                            // display valid moves
+                            List<Move> moves = board.getTile(currentLocation).piece.getValidMoves(board,currentLocation);
+                            for (Move move : moves) {
+                                setPossibleMove(clickablePanels.get(move.destination));
                             }
                         }
                     } else if (selectedPanels.size() == 1) {
+                        Move move = new Move(selectedPanels.get(0), currentLocation, false, false);
+                        /*
                         if (board.getTile(currentLocation).isCastleMove()) {
                             if (currentLocation.col == 6) {
                                 board.castleKingSideMove(selectedPanels.get(0));
@@ -174,18 +175,17 @@ public class ClickableBoard extends JPanel {
                             deselectPanels();
                             currentPlayer = board.nextPlayer();
                         }
-                        else if (board.movePiece(selectedPanels.get(0), currentLocation)) {
+                         */
+                        if (board.movePiece(move)) {
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
-                            deselectPanels();
                             currentPlayer = board.nextPlayer();
+                            deselectPanels();
                         }
                     }
-
                     if (confirmMove) {
                         deselectPanels();
                         confirmMove = false;
                     }
-
                     updateGui();
 
                 } catch (Exception e) {

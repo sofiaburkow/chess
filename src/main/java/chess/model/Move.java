@@ -2,10 +2,12 @@ package chess.model;
 
 import grid.Location;
 
+import java.util.Objects;
+
 public class Move {
 
-    private Location source;
-    private Location destination;
+    public final Location source;
+    public final Location destination;
     boolean castleMove;
     boolean enPassant;
 
@@ -23,4 +25,13 @@ public class Move {
     public boolean isCastleMove() {
         return castleMove;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Move)) return false;
+        Move move = (Move) o;
+        return castleMove == move.castleMove && enPassant == move.enPassant && Objects.equals(source, move.source) && Objects.equals(destination, move.destination);
+    }
+
 }

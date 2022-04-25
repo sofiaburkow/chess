@@ -1,6 +1,7 @@
 package chess.model.piece;
 
 import chess.model.ChessModel;
+import chess.model.Move;
 import grid.Location;
 
 import java.awt.*;
@@ -19,12 +20,12 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Location> getValidMoves(ChessModel board, Location start) {
+    public List<Move> getValidMoves(ChessModel board, Location source) {
 
-        List<Location> moves = new ArrayList<>();
+        List<Move> moves = new ArrayList<>();
 
-        addAdvanceMoves(board, start, moves);
-        addCaptureMoves(board, start, moves);
+        addAdvanceMoves(board, source, moves);
+        addCaptureMoves(board, source, moves);
         //addEnPassant(board, start, moves);
 
         return moves;
@@ -33,25 +34,25 @@ public class Pawn extends Piece {
     /**
      * Add valid moves to the list of possible moves where the pawn advances on the board.
      */
-    private void addAdvanceMoves(ChessModel board, Location loc, List<Location> moves) {
+    private void addAdvanceMoves(ChessModel board, Location source, List<Move> moves) {
         int move;
         if (isWhite()) {
             move = -1;
         } else {
             move = 1;
         }
-        Location advanceOne = new Location(loc.row + move, loc.col);
+        Location advanceOne = new Location(source.row + move, source.col);
         if (board.isOnBoard(advanceOne)) {
             if (board.getTile(advanceOne).isEmpty()) {
-                moves.add(advanceOne);
+                moves.add(new Move(source, advanceOne, false, false));
             }
         }
         // if the pawn has yet to move
-        if ((isWhite() && loc.row == 6) || (!isWhite() && loc.row == 1)) {
-            Location advanceTwo = new Location(loc.row + move * 2, loc.col);
+        if ((isWhite() && source.row == 6) || (!isWhite() && source.row == 1)) {
+            Location advanceTwo = new Location(source.row + move * 2, source.col);
             if (board.isOnBoard(advanceTwo)) {
-                if (board.getTile(new Location(loc.row + move * 1, loc.col)).isEmpty() && (board.getTile(advanceTwo).isEmpty())) {
-                    moves.add(advanceTwo);
+                if (board.getTile(new Location(source.row + move * 1, source.col)).isEmpty() && (board.getTile(advanceTwo).isEmpty())) {
+                    moves.add(new Move(source, advanceTwo, false, false));
                 }
             }
         }
@@ -61,26 +62,26 @@ public class Pawn extends Piece {
     /**
      * Add moves where the pawn captures an opponents piece to the list of possible moves.
      */
-    private void addCaptureMoves(ChessModel board, Location loc, List<Location> moves) {
+    private void addCaptureMoves(ChessModel board, Location source, List<Move> moves) {
         int move;
         if (isWhite()) {
             move = -1;
         } else {
             move = 1;
         }
-        Location captureNorthWest = new Location(loc.row+move, loc.col-1);
+        Location captureNorthWest = new Location(source.row+move, source.col-1);
         if (board.isOnBoard(captureNorthWest)) {
             if (!board.getTile(captureNorthWest).isEmpty()) {
                 if (board.getTile(captureNorthWest).piece.getPlayer() != getPlayer()) {
-                    moves.add(captureNorthWest);
+                    moves.add(new Move(source, captureNorthWest, false, false));
                 }
             }
         }
-        Location captureNorthEast = new Location(loc.row+move, loc.col+1);
+        Location captureNorthEast = new Location(source.row+move, source.col+1);
         if (board.isOnBoard(captureNorthEast)) {
             if (!board.getTile(captureNorthEast).isEmpty()) {
                 if (board.getTile(captureNorthEast).piece.getPlayer() != getPlayer()) {
-                    moves.add(captureNorthEast);
+                    moves.add(new Move(source, captureNorthEast, false, false));
                 }
             }
         }

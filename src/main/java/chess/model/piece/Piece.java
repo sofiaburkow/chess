@@ -1,6 +1,7 @@
 package chess.model.piece;
 
 import chess.model.ChessModel;
+import chess.model.Move;
 import chess.model.Player;
 import chess.model.Tile;
 import grid.Location;
@@ -43,7 +44,7 @@ public abstract class Piece implements IPiece {
     public abstract Type getPiece();
 
     @Override
-    public abstract List<Location> getValidMoves(ChessModel board, Location start);
+    public abstract List<Move> getValidMoves(ChessModel board, Location start);
 
     @Override
     public boolean isValidMove(ChessModel board, Location loc) {
@@ -58,18 +59,16 @@ public abstract class Piece implements IPiece {
         return false;
     }
 
-    public void addMoves(ChessModel board, Location start, int rowOperand, int columnOperand, List<Location> moves) {
+    @Override
+    public void addMoves(ChessModel board, Location source, int rowOperand, int columnOperand, List<Move> moves) {
         for (int i = 1; i < board.numColumns(); i++) {
-            Location loc = new Location(start.row+rowOperand*i, start.col+columnOperand*i);
-            if (isValidMove(board, loc)) {
-                moves.add(loc);
-                // if it is of the opposite color
-                /*
-                if (board.getTile(loc).piece.getPiece() != null) {
+            Location destination = new Location(source.row+rowOperand*i, source.col+columnOperand*i);
+            if (isValidMove(board, destination)) {
+                Move move = new Move(source, destination, false, false);
+                moves.add(move);
+                if (!board.getTile(destination).isEmpty()) {
                     break;
                 }
-
-                 */
             } else {
                 break;
             }
@@ -77,8 +76,11 @@ public abstract class Piece implements IPiece {
     }
 
     @Override
-    public boolean canMove(ChessModel board, Location start, Location end) {
-        if (getValidMoves(board, start).contains(end)) {
+    public boolean canMove(ChessModel board, Move move) {
+        for (Move m : getValidMoves(board, move.source)) {
+            System.out.println(m.destination);
+        }
+        if (getValidMoves(board, move.source).contains(move)) {
             return true;
         }
         return false;

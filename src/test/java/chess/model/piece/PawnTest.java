@@ -3,6 +3,7 @@ package chess.model.piece;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import chess.model.ChessModel;
+import chess.model.Move;
 import chess.model.Tile;
 import grid.Location;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ public class PawnTest {
     void pawnAtStartingPositionMoves() {
         ChessModel board = new ChessModel();
         Location pawnLocation = new Location(1,3);
-        List<Location> moves = board.getTile(pawnLocation).piece.getValidMoves(board,pawnLocation);
+        List<Move> moves = board.getTile(pawnLocation).piece.getValidMoves(board,pawnLocation);
 
         List<Location> trueMoves = new ArrayList<>();
         trueMoves.add(new Location(2,3));
@@ -43,7 +44,7 @@ public class PawnTest {
         board.setTile(oldPawnLocation, null);
         board.setTile(newPawnLocation, pawnTile);
 
-        List<Location> moves = board.getTile(newPawnLocation).piece.getValidMoves(board,newPawnLocation);
+        List<Move> moves = board.getTile(newPawnLocation).piece.getValidMoves(board,newPawnLocation);
 
         List<Location> trueMoves = new ArrayList<>();
         trueMoves.add(new Location(3,3));

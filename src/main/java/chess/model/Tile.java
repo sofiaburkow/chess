@@ -28,8 +28,6 @@ public class Tile {
             return "W";
         }
         return "B";
-
-        //return null;
     }
 
     public boolean isEnPassant() {

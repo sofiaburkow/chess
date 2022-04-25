@@ -51,18 +51,17 @@ public class ChessModel {
         return getCurrentPlayer();
     }
 
-    public boolean validMove(Location source, Location destination) {
-        if (this.getTile(source).isEmpty()) {
+    public boolean validMove(Move move) {
+        if (this.getTile(move.source).isEmpty()) {
             return false;
         }
-        return this.getTile(source).piece.canMove(this, source, destination);
+        return this.getTile(move.source).piece.canMove(this, move);
     }
 
-    public boolean movePiece(Location source, Location destination) {
-        if (validMove(source, destination)) {
-            Tile sourceTile = this.getTile(source);
-            this.setTile(source, new Tile(null));
-            this.setTile(destination, sourceTile);
+    public boolean movePiece(Move move) {
+        if (validMove(move)) {
+            this.setTile(move.destination, this.getTile(move.source));
+            this.setTile(move.source, new Tile(null));
             return true;
         }
         return false;

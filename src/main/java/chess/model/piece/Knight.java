@@ -1,6 +1,7 @@
 package chess.model.piece;
 
 import chess.model.ChessModel;
+import chess.model.Move;
 import grid.Location;
 
 import java.awt.*;
@@ -19,32 +20,31 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Location> getValidMoves(ChessModel board, Location start) {
+    public List<Move> getValidMoves(ChessModel board, Location source) {
 
-        List<Location> possibleMoves = getPossibleMoves(board, start);
+        List<Move> possibleMoves = getPossibleMoves(board, source);
 
-        List<Location> validMoves = new ArrayList<>();
-        for (Location loc : possibleMoves) {
-            if (isValidMove(board,loc)) {
-                validMoves.add(loc);
+        List<Move> validMoves = new ArrayList<>();
+        for (Move move : possibleMoves) {
+            if (isValidMove(board,move.destination)) {
+                validMoves.add(move);
             }
         }
-
         return validMoves;
     }
 
-    private List<Location> getPossibleMoves(ChessModel board, Location start) {
+    private List<Move> getPossibleMoves(ChessModel board, Location source) {
 
-        List<Location> moves = new ArrayList<>();
+        List<Move> moves = new ArrayList<>();
 
-        moves.add(new Location(start.row+2, start.col+1));
-        moves.add(new Location(start.row+2, start.col-1));
-        moves.add(new Location(start.row+1, start.col+2));
-        moves.add(new Location(start.row+1, start.col-2));
-        moves.add(new Location(start.row-1, start.col+2));
-        moves.add(new Location(start.row-1, start.col-2));
-        moves.add(new Location(start.row-2, start.col+1));
-        moves.add(new Location(start.row-2, start.col-1));
+        moves.add(new Move(source, new Location(source.row+2, source.col+1), false, false));
+        moves.add(new Move(source, new Location(source.row+2, source.col-1), false, false));
+        moves.add(new Move(source, new Location(source.row+1, source.col+2), false, false));
+        moves.add(new Move(source, new Location(source.row+1, source.col-2), false, false));
+        moves.add(new Move(source, new Location(source.row-1, source.col+2), false, false));
+        moves.add(new Move(source, new Location(source.row-1, source.col-2), false, false));
+        moves.add(new Move(source, new Location(source.row-2, source.col+1), false, false));
+        moves.add(new Move(source, new Location(source.row-2, source.col-1), false, false));
 
         return moves;
     }

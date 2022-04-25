@@ -1,6 +1,7 @@
 package chess.model.piece;
 
 import chess.model.ChessModel;
+import chess.model.Move;
 import chess.model.Player;
 import grid.Location;
 
@@ -35,7 +36,7 @@ public interface IPiece {
      *
      * @return list of possible end locations.
      */
-    List<Location> getValidMoves(ChessModel board, Location start);
+    List<Move> getValidMoves(ChessModel board, Location start);
 
     /**
      *
@@ -43,14 +44,14 @@ public interface IPiece {
      */
     boolean isValidMove(ChessModel board, Location loc);
 
-    void addMoves(ChessModel board, Location start, int rowOperand, int columnOperand, List<Location> moves);
+    void addMoves(ChessModel board, Location start, int rowOperand, int columnOperand, List<Move> moves);
 
     /**
      * Checks whether a given move is valid or not.
      *
      * @return true if move is valid, otherwise false.
      */
-    boolean canMove(ChessModel board, Location start, Location end);
+    boolean canMove(ChessModel board, Move move);
 
     boolean hasMovedBefore();
 
