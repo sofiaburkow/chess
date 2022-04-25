@@ -2,7 +2,7 @@ package chess.model.piece;
 
 import chess.model.ChessModel;
 import chess.model.Move;
-import chess.model.Player;
+import chess.model.Team;
 import grid.Location;
 
 import java.util.List;
@@ -10,19 +10,31 @@ import java.util.List;
 public interface IPiece {
 
     /**
-     * The color of the piece.
+     * Keeps track of whether the piece has moved before or not.
      *
-     * @return true if white, false if black
+     * @return true if the piece has moved before, otherwise false.
+     */
+    boolean hasMovedBefore();
+
+    /**
+     * Set the value of the boolean variable hasMovedBefore to either true or false.
+     */
+    void setHasMovedBefore(boolean hasMovedBefore);
+
+    /**
+     * @return true if the piece is white, otherwise return false.
      */
     boolean isWhite();
 
     /**
-     * @return whether the given piece is on the white or black team.
+     * @return Team.WHITE if the piece is on the white team, otherwise return Team.BLACK.
      */
-    Player getPlayer();
+    Team getTeam();
 
     /**
-     * @return the initials of the color of the piece.
+     * The initials of the color of the piece.
+     *
+     * @return "W" if the piece is white, otherwise "B"
      */
     String getPieceColor();
 
@@ -32,29 +44,16 @@ public interface IPiece {
     Type getPiece();
 
     /**
-     * List of possible moves according to the state of the board and the given piece.
+     * List of valid moves according to the state of the board and the given piece.
      *
-     * @return list of possible end locations.
+     * @return list of valid moves.
      */
-    List<Move> getValidMoves(ChessModel board, Location start);
-
-    /**
-     *
-     * @return
-     */
-    boolean isValidMove(ChessModel board, Location loc);
-
-    void addMoves(ChessModel board, Location start, int rowOperand, int columnOperand, List<Move> moves);
+    List<Move> getValidMoves(ChessModel board, Location source);
 
     /**
      * Checks whether a given move is valid or not.
      *
-     * @return true if move is valid, otherwise false.
+     * @return true if the move is valid, otherwise false.
      */
     boolean canMove(ChessModel board, Move move);
-
-    boolean hasMovedBefore();
-
-    void setHasMovedBefore(boolean hasMovedBefore);
-
 }

@@ -20,15 +20,12 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(ChessModel board, Location start) {
-
+    public List<Move> getValidMoves(ChessModel board, Location source) {
         List<Move> validMoves = new ArrayList<>();
-
-        addMoves(board, start, 1,1, validMoves);
-        addMoves(board, start, 1,-1, validMoves);
-        addMoves(board, start, -1,1, validMoves);
-        addMoves(board, start, -1,-1, validMoves);
-
+        addValidMoves(board, source, 1,1, validMoves);
+        addValidMoves(board, source, 1,-1, validMoves);
+        addValidMoves(board, source, -1,1, validMoves);
+        addValidMoves(board, source, -1,-1, validMoves);
         return validMoves;
     }
 

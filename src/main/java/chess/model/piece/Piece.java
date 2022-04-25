@@ -2,8 +2,7 @@ package chess.model.piece;
 
 import chess.model.ChessModel;
 import chess.model.Move;
-import chess.model.Player;
-import chess.model.Tile;
+import chess.model.Team;
 import grid.Location;
 
 import java.awt.Color;
@@ -20,16 +19,26 @@ public abstract class Piece implements IPiece {
     }
 
     @Override
+    public boolean hasMovedBefore() {
+        return hasMovedBefore;
+    }
+
+    @Override
+    public void setHasMovedBefore(boolean hasMovedBefore) {
+        this.hasMovedBefore = hasMovedBefore;
+    }
+
+    @Override
     public boolean isWhite() {
         return this.color == Color.WHITE;
     }
 
     @Override
-    public Player getPlayer() {
+    public Team getTeam() {
         if (isWhite()) {
-            return Player.WHITE;
+            return Team.WHITE;
         }
-        return Player.BLACK;
+        return Team.BLACK;
     }
 
     @Override
@@ -44,28 +53,40 @@ public abstract class Piece implements IPiece {
     public abstract Type getPiece();
 
     @Override
-    public abstract List<Move> getValidMoves(ChessModel board, Location start);
+    public abstract List<Move> getValidMoves(ChessModel board, Location source);
 
     @Override
-    public boolean isValidMove(ChessModel board, Location loc) {
-        if (board.isOnBoard(loc)) {
-            if (board.getTile(loc).isEmpty()) {
-                return true;
-            }
-            if (board.getTile(loc).piece.isWhite() != isWhite()) {
+    public boolean canMove(ChessModel board, Move move) {
+        if (getValidMoves(board, move.source).contains(move)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether the destination tile is valid or not. The location is valid if the
+     * tile is empty, or if the piece on the given tile is of the opposite team.
+     *
+     * @return true if the destination location is valid, otherwise false.
+     */
+    protected boolean isValidDestinationTile(ChessModel board, Location destination) {
+        if (board.isOnBoard(destination)) {
+            if (board.getTile(destination).isEmpty() || board.getTile(destination).piece.isWhite() != isWhite()) {
                 return true;
             }
         }
         return false;
     }
 
-    @Override
-    public void addMoves(ChessModel board, Location source, int rowOperand, int columnOperand, List<Move> moves) {
+    /**
+     * Add valid horizontal, vertical and diagonal moves to the list of moves.
+     * The method will loop over the tiles on the board according to rowOperand and columnOperand.
+     */
+    protected void addValidMoves(ChessModel board, Location source, int rowOperand, int columnOperand, List<Move> moves) {
         for (int i = 1; i < board.numColumns(); i++) {
             Location destination = new Location(source.row+rowOperand*i, source.col+columnOperand*i);
-            if (isValidMove(board, destination)) {
-                Move move = new Move(source, destination, false, false);
-                moves.add(move);
+            if (isValidDestinationTile(board, destination)) {
+                moves.add(new Move(source, destination));
                 if (!board.getTile(destination).isEmpty()) {
                     break;
                 }
@@ -74,26 +95,4 @@ public abstract class Piece implements IPiece {
             }
         }
     }
-
-    @Override
-    public boolean canMove(ChessModel board, Move move) {
-        for (Move m : getValidMoves(board, move.source)) {
-            System.out.println(m.destination);
-        }
-        if (getValidMoves(board, move.source).contains(move)) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean hasMovedBefore() {
-        return hasMovedBefore;
-    }
-
-    @Override
-    public void setHasMovedBefore(boolean hasMovedBefore) {
-        this.hasMovedBefore = hasMovedBefore;
-    }
-
 }

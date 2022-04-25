@@ -1,6 +1,6 @@
 package chess.model;
 
-public enum Player {
+public enum Team {
     WHITE,
     BLACK;
 }

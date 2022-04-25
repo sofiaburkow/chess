@@ -32,24 +32,24 @@ public class Queen extends Piece {
     private void addNeighbors(ChessModel board, Location source, List<Move> moves) {
         Collection<Location> neighbors = source.allNeighbors();
         for (Location loc : neighbors) {
-            if (isValidMove(board, loc)) {
-                moves.add(new Move(source, loc, false, false));
+            if (isValidDestinationTile(board, loc)) {
+                moves.add(new Move(source, loc));
             }
         }
     }
 
-    private void addHorizontalAndVerticalMoves(ChessModel board, Location start, List<Move> validMoves) {
-        addMoves(board, start, 1,0, validMoves);
-        addMoves(board, start, 0,1, validMoves);
-        addMoves(board, start, -1,0, validMoves);
-        addMoves(board, start, 0,-1, validMoves);
+    private void addHorizontalAndVerticalMoves(ChessModel board, Location source, List<Move> validMoves) {
+        addValidMoves(board, source, 1,0, validMoves);
+        addValidMoves(board, source, 0,1, validMoves);
+        addValidMoves(board, source, -1,0, validMoves);
+        addValidMoves(board, source, 0,-1, validMoves);
     }
 
-    private void addDiagonalMoves(ChessModel board, Location start, List<Move> validMoves) {
-        addMoves(board, start, 1,1, validMoves);
-        addMoves(board, start, 1,-1, validMoves);
-        addMoves(board, start, -1,1, validMoves);
-        addMoves(board, start, -1,-1, validMoves);
+    private void addDiagonalMoves(ChessModel board, Location source, List<Move> validMoves) {
+        addValidMoves(board, source, 1,1, validMoves);
+        addValidMoves(board, source, 1,-1, validMoves);
+        addValidMoves(board, source, -1,1, validMoves);
+        addValidMoves(board, source, -1,-1, validMoves);
     }
 
 }

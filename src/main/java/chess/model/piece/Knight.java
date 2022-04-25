@@ -21,31 +21,26 @@ public class Knight extends Piece {
 
     @Override
     public List<Move> getValidMoves(ChessModel board, Location source) {
-
-        List<Move> possibleMoves = getPossibleMoves(board, source);
-
+        List<Move> possibleMoves = getPossibleMoves(source);
         List<Move> validMoves = new ArrayList<>();
         for (Move move : possibleMoves) {
-            if (isValidMove(board,move.destination)) {
+            if (isValidDestinationTile(board,move.destination)) {
                 validMoves.add(move);
             }
         }
         return validMoves;
     }
 
-    private List<Move> getPossibleMoves(ChessModel board, Location source) {
-
+    private List<Move> getPossibleMoves(Location source) {
         List<Move> moves = new ArrayList<>();
-
-        moves.add(new Move(source, new Location(source.row+2, source.col+1), false, false));
-        moves.add(new Move(source, new Location(source.row+2, source.col-1), false, false));
-        moves.add(new Move(source, new Location(source.row+1, source.col+2), false, false));
-        moves.add(new Move(source, new Location(source.row+1, source.col-2), false, false));
-        moves.add(new Move(source, new Location(source.row-1, source.col+2), false, false));
-        moves.add(new Move(source, new Location(source.row-1, source.col-2), false, false));
-        moves.add(new Move(source, new Location(source.row-2, source.col+1), false, false));
-        moves.add(new Move(source, new Location(source.row-2, source.col-1), false, false));
-
+        moves.add(new Move(source, new Location(source.row+2, source.col+1)));
+        moves.add(new Move(source, new Location(source.row+2, source.col-1)));
+        moves.add(new Move(source, new Location(source.row+1, source.col+2)));
+        moves.add(new Move(source, new Location(source.row+1, source.col-2)));
+        moves.add(new Move(source, new Location(source.row-1, source.col+2)));
+        moves.add(new Move(source, new Location(source.row-1, source.col-2)));
+        moves.add(new Move(source, new Location(source.row-2, source.col+1)));
+        moves.add(new Move(source, new Location(source.row-2, source.col-1)));
         return moves;
     }
 

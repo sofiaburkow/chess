@@ -2,7 +2,7 @@ package chess.GUI;
 
 import chess.model.ChessModel;
 import chess.model.Move;
-import chess.model.Player;
+import chess.model.Team;
 import grid.Grid;
 import grid.Location;
 
@@ -18,7 +18,7 @@ public class ClickableBoard extends JPanel {
     private MouseAdapter adapter;
     private Grid<TilePanel> clickablePanels;
     private ChessModel board;
-    private Player currentPlayer;
+    private Team currentPlayer;
     private Color tileColor;
 
     /**
@@ -62,8 +62,8 @@ public class ClickableBoard extends JPanel {
                 clickablePanels.get(loc).setPiece(null);
                 clickablePanels.get(loc).setPieceColor(null);
             } else {
-                clickablePanels.get(loc).setPiece(board.getTile(loc).getPiece());
-                clickablePanels.get(loc).setPieceColor(board.getTile(loc).getPieceColor());
+                clickablePanels.get(loc).setPiece(board.getTile(loc).piece.getPiece());
+                clickablePanels.get(loc).setPieceColor(board.getTile(loc).piece.getPieceColor());
             }
         }
         validate(); //TODO: why?
@@ -135,7 +135,7 @@ public class ClickableBoard extends JPanel {
     }
 
     public boolean validSourceTile(Location loc) {
-        if (board.getTile(loc).isEmpty() || board.getTile(loc).piece.getPlayer() != currentPlayer) {
+        if (board.getTile(loc).isEmpty() || board.getTile(loc).piece.getTeam() != currentPlayer) {
             return false;
         }
         return true;
@@ -163,8 +163,7 @@ public class ClickableBoard extends JPanel {
                             }
                         }
                     } else if (selectedPanels.size() == 1) {
-                        Move move = new Move(selectedPanels.get(0), currentLocation, false, false);
-                        /*
+                        Move move = new Move(selectedPanels.get(0), currentLocation);
                         if (board.getTile(currentLocation).isCastleMove()) {
                             if (currentLocation.col == 6) {
                                 board.castleKingSideMove(selectedPanels.get(0));
@@ -172,14 +171,20 @@ public class ClickableBoard extends JPanel {
                                 board.castleQueenSideMove(selectedPanels.get(0));
                             }
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
-                            deselectPanels();
                             currentPlayer = board.nextPlayer();
-                        }
-                         */
-                        if (board.movePiece(move)) {
+                            deselectPanels();
+                            board.addMoveToMoveHistory(move);
+                        } else if (board.getTile(currentLocation).isEnPassant()) {
+                            board.enPassantMove(move);
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
                             currentPlayer = board.nextPlayer();
                             deselectPanels();
+                            board.addMoveToMoveHistory(move);
+                        } else if (board.movePiece(move)) {
+                            board.getTile(currentLocation).piece.setHasMovedBefore(true);
+                            currentPlayer = board.nextPlayer();
+                            deselectPanels();
+                            board.addMoveToMoveHistory(move);
                         }
                     }
                     if (confirmMove) {

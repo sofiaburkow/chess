@@ -12,30 +12,12 @@ public class Tile {
 
     public Tile(IPiece piece) {
         this.piece = piece;
-        this.enPassant = false;
         this.castleMove = false;
+        this.enPassant = false;
     }
 
     public Type getPiece() {
         return piece.getPiece();
-    }
-
-    /**
-     * @return the initial of the color of the piece
-     */
-    public String getPieceColor() {
-        if (piece.isWhite()) {
-            return "W";
-        }
-        return "B";
-    }
-
-    public boolean isEnPassant() {
-        return enPassant;
-    }
-
-    public void setEnPassant(boolean enPassant) {
-        this.enPassant = enPassant;
     }
 
     public boolean isCastleMove() {
@@ -44,6 +26,14 @@ public class Tile {
 
     public void setCastleMove(boolean castleMove) {
         this.castleMove = castleMove;
+    }
+
+    public boolean isEnPassant() {
+        return enPassant;
+    }
+
+    public void setEnPassant(boolean enPassant) {
+        this.enPassant = enPassant;
     }
 
     public boolean isEmpty() {

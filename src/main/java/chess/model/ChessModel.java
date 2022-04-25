@@ -4,22 +4,33 @@ import grid.GridLocationIterator;
 import grid.Location;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChessModel {
 
     private ChessBoard board;
-    private ArrayList<Player> players;
+    private ArrayList<Team> players;
     private int currentIndex;
+    private List<Move> moveHistory;
 
     public ChessModel () {
         this.board = new ChessBoard(8,8, new Tile(null));
+        this.moveHistory = new ArrayList<>();
 
         players = new ArrayList<>(2);
-        players.add(Player.WHITE);
-        players.add(Player.BLACK);
+        players.add(Team.WHITE);
+        players.add(Team.BLACK);
         currentIndex = 0;
 
         board.initializeBoard();
+    }
+
+    public List<Move> getMoveHistory() {
+        return this.moveHistory;
+    }
+
+    public void addMoveToMoveHistory(Move move) {
+        moveHistory.add(move);
     }
 
     public Tile getTile(Location loc) {
@@ -42,11 +53,11 @@ public class ChessModel {
         return board.locations();
     }
 
-    public Player getCurrentPlayer() {
+    public Team getCurrentPlayer() {
         return players.get(currentIndex);
     }
 
-    public Player nextPlayer() {
+    public Team nextPlayer() {
         currentIndex = (currentIndex+1) % 2;
         return getCurrentPlayer();
     }
@@ -58,6 +69,9 @@ public class ChessModel {
         return this.getTile(move.source).piece.canMove(this, move);
     }
 
+    /**
+     * Move the piece from the source tile to the destination tile and empty the source tile.
+     */
     public boolean movePiece(Move move) {
         if (validMove(move)) {
             this.setTile(move.destination, this.getTile(move.source));
@@ -87,6 +101,17 @@ public class ChessModel {
         Tile rookTile = this.getTile(new Location(source.row, source.col-4));
         this.setTile(new Location(source.row, source.col-4), new Tile(null));
         this.setTile(new Location(source.row, source.col-1), rookTile);
+    }
+
+    public void enPassantMove(Move move) {
+        Tile kingTile = this.getTile(move.source);
+        this.setTile(move.destination, kingTile);
+        this.setTile(move.source, new Tile(null));
+        if (move.destination.row == 2) {
+            this.setTile(new Location(move.destination.row+1, move.destination.col), new Tile(null));
+        } else {
+            this.setTile(new Location(move.destination.row-1, move.destination.col), new Tile(null));
+        }
     }
 
 }

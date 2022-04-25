@@ -5,20 +5,15 @@ import grid.Grid;
 import grid.Location;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChessBoard extends Grid<Tile> {
 
-    private List<Move> moveHistory;
-
     public ChessBoard(int rows, int cols, Tile element) {
         super(rows, cols, element);
-        this.moveHistory = new ArrayList<>();
     }
 
     /**
-     * Create a standard chess board.
+     * Initialize a standard chess board.
      */
     public void initializeBoard() {
         // black pieces
@@ -62,14 +57,6 @@ public class ChessBoard extends Grid<Tile> {
 
     public void resetBoard() {
         this.initializeBoard();
-    }
-
-    public List<Move> getMoveHistory() {
-        return this.moveHistory;
-    }
-
-    public void addMoveToMoveHistory(Move move) {
-        moveHistory.add(move);
     }
 
 }
