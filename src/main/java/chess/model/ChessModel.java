@@ -75,7 +75,7 @@ public class ChessModel {
         return this.getTile(move.source).piece.canMove(this, move);
     }
 
-    private ChessModel copy() {
+    public ChessModel copy() {
         ChessModel copy = new ChessModel();
         for (Location loc : this.locations()) {
             copy.setTile(loc, this.getTile(loc));

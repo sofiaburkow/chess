@@ -142,15 +142,6 @@ public class ClickableBoard extends JPanel {
         return true;
     }
 
-    public boolean isCheck() {
-        for (Location underAttack : board.tilesUnderAttack()) {
-            if (!board.getTile(underAttack).isEmpty() && board.getTile(underAttack).getPiece() == Type.KING) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     class ClickableBoardListener extends MouseAdapter {
         // This is what happens when the mouse clicks on one of the squares of the grid.
         @Override
@@ -176,9 +167,6 @@ public class ClickableBoard extends JPanel {
                         }
                     } else if (selectedPanels.size() == 1) {
                         Move move = new Move(selectedPanels.get(0), currentLocation);
-                        if (isCheck()) {
-                            System.out.println(isCheck());
-                        }
                         if (board.validMove(move)) {
                             if (board.getTile(currentLocation).isCastleMove()) {
                                 if (currentLocation.col == 6) {
@@ -186,11 +174,9 @@ public class ClickableBoard extends JPanel {
                                 } else if (currentLocation.col == 2) {
                                     board.castleQueenSideMove(move);
                                 }
-                            }
-                            else if (board.getTile(currentLocation).isEnPassant()) {
+                            } else if (board.getTile(currentLocation).isEnPassant()) {
                                 board.enPassantMove(move);
-                            }
-                            else {
+                            } else {
                                 board.movePiece(move);
                             }
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
@@ -198,6 +184,7 @@ public class ClickableBoard extends JPanel {
                             deselectPanels();
                             board.addMoveToMoveHistory(move);
                         }
+
                     }
                     if (confirmMove) {
                         deselectPanels();
