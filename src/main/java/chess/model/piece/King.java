@@ -30,7 +30,7 @@ public class King extends Piece {
             }
         }
         addCastleMoves(board, source, validMoves);
-        return validMoves;
+        return checkForChess(board, validMoves);
     }
 
     /**
@@ -55,6 +55,17 @@ public class King extends Piece {
                 }
             }
         }
+    }
+
+    private List<Move> checkForChess(ChessModel board, List<Move> moves) {
+        List<Move> validMoves = new ArrayList<>();
+        List<Location> chess = board.tilesUnderAttack();
+        for (Move move : moves) {
+            if (!chess.contains(move.destination)) {
+                validMoves.add(move);
+            }
+        }
+        return validMoves;
     }
 
 }

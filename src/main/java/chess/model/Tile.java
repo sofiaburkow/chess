@@ -6,7 +6,6 @@ import chess.model.piece.Type;
 public class Tile {
 
     public final IPiece piece;
-
     private boolean castleMove;
     private boolean enPassant;
 
@@ -14,6 +13,13 @@ public class Tile {
         this.piece = piece;
         this.castleMove = false;
         this.enPassant = false;
+    }
+
+    public boolean isEmpty() {
+        if (piece == null) {
+            return true;
+        }
+        return false;
     }
 
     public Type getPiece() {
@@ -36,10 +42,4 @@ public class Tile {
         this.enPassant = enPassant;
     }
 
-    public boolean isEmpty() {
-        if (piece == null) {
-            return true;
-        }
-        return false;
-    }
 }

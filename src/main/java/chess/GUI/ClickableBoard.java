@@ -164,23 +164,20 @@ public class ClickableBoard extends JPanel {
                         }
                     } else if (selectedPanels.size() == 1) {
                         Move move = new Move(selectedPanels.get(0), currentLocation);
-                        if (board.getTile(currentLocation).isCastleMove()) {
-                            if (currentLocation.col == 6) {
-                                board.castleKingSideMove(selectedPanels.get(0));
-                            } else if (currentLocation.col == 2) {
-                                board.castleQueenSideMove(selectedPanels.get(0));
+                        if (board.validMove(move)) {
+                            if (board.getTile(currentLocation).isCastleMove()) {
+                                if (currentLocation.col == 6) {
+                                    board.castleKingSideMove(move);
+                                } else if (currentLocation.col == 2) {
+                                    board.castleQueenSideMove(move);
+                                }
                             }
-                            board.getTile(currentLocation).piece.setHasMovedBefore(true);
-                            currentPlayer = board.nextPlayer();
-                            deselectPanels();
-                            board.addMoveToMoveHistory(move);
-                        } else if (board.getTile(currentLocation).isEnPassant()) {
-                            board.enPassantMove(move);
-                            board.getTile(currentLocation).piece.setHasMovedBefore(true);
-                            currentPlayer = board.nextPlayer();
-                            deselectPanels();
-                            board.addMoveToMoveHistory(move);
-                        } else if (board.movePiece(move)) {
+                            else if (board.getTile(currentLocation).isEnPassant()) {
+                                board.enPassantMove(move);
+                            }
+                            else {
+                                board.movePiece(move);
+                            }
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
                             currentPlayer = board.nextPlayer();
                             deselectPanels();

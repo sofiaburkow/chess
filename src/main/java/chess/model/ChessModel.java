@@ -1,5 +1,6 @@
 package chess.model;
 
+import chess.model.piece.Type;
 import grid.GridLocationIterator;
 import grid.Location;
 
@@ -16,12 +17,10 @@ public class ChessModel {
     public ChessModel () {
         this.board = new ChessBoard(8,8, new Tile(null));
         this.moveHistory = new ArrayList<>();
-
         players = new ArrayList<>(2);
         players.add(Team.WHITE);
         players.add(Team.BLACK);
         currentIndex = 0;
-
         board.initializeBoard();
     }
 
@@ -62,6 +61,10 @@ public class ChessModel {
         return getCurrentPlayer();
     }
 
+    public boolean isOnBoard(Location loc) {
+        return board.isOnGrid(loc);
+    }
+
     public boolean validMove(Move move) {
         if (this.getTile(move.source).isEmpty()) {
             return false;
@@ -72,46 +75,50 @@ public class ChessModel {
     /**
      * Move the piece from the source tile to the destination tile and empty the source tile.
      */
-    public boolean movePiece(Move move) {
-        if (validMove(move)) {
-            this.setTile(move.destination, this.getTile(move.source));
-            this.setTile(move.source, new Tile(null));
-            return true;
-        }
-        return false;
+    public void movePiece(Move move) {
+        this.setTile(move.destination, this.getTile(move.source));
+        this.setTile(move.source, new Tile(null));
     }
 
-    public boolean isOnBoard(Location loc) {
-        return board.isOnGrid(loc);
+    public void castleKingSideMove(Move move) {
+        movePiece(move);
+        Location castleFrom = new Location(move.source.row, move.source.col+3);
+        Location castleTo = new Location(move.source.row, move.source.col+1);
+        movePiece(new Move(castleFrom, castleTo));
     }
 
-    public void castleKingSideMove(Location source) {
-        Tile kingTile = this.getTile(source);
-        this.setTile(new Location(source.row, source.col+2), kingTile);
-        this.setTile(source, new Tile(null));
-        Tile rookTile = this.getTile(new Location(source.row, source.col+3));
-        this.setTile(new Location(source.row, source.col+3), new Tile(null));
-        this.setTile(new Location(source.row, source.col+1), rookTile);
-    }
-
-    public void castleQueenSideMove(Location source) {
-        Tile kingTile = this.getTile(source);
-        this.setTile(new Location(source.row, source.col-2), kingTile);
-        this.setTile(source, new Tile(null));
-        Tile rookTile = this.getTile(new Location(source.row, source.col-4));
-        this.setTile(new Location(source.row, source.col-4), new Tile(null));
-        this.setTile(new Location(source.row, source.col-1), rookTile);
+    public void castleQueenSideMove(Move move) {
+        movePiece(move);
+        Location castleFrom = new Location(move.source.row, move.source.col-4);
+        Location castleTo = new Location(move.source.row, move.source.col-1);
+        movePiece(new Move(castleFrom, castleTo));
     }
 
     public void enPassantMove(Move move) {
-        Tile kingTile = this.getTile(move.source);
-        this.setTile(move.destination, kingTile);
-        this.setTile(move.source, new Tile(null));
+        movePiece(move);
         if (move.destination.row == 2) {
             this.setTile(new Location(move.destination.row+1, move.destination.col), new Tile(null));
         } else {
             this.setTile(new Location(move.destination.row-1, move.destination.col), new Tile(null));
         }
+    }
+
+    /**
+     * @return all tiles under attack.
+     */
+    public List<Location> tilesUnderAttack() {
+        List<Location> underAttack = new ArrayList<>();
+        for (Location loc : board.locations()) {
+            if (this.isOnBoard(loc) && !this.getTile(loc).isEmpty()) {
+                if (this.getTile(loc).piece.getTeam() != getCurrentPlayer() && this.getTile(loc).getPiece() != Type.KING) {
+                    List<Move> moves = this.getTile(loc).piece.getValidMoves(this, loc);
+                    for (Move move : moves) {
+                        underAttack.add(move.destination);
+                    }
+                }
+            }
+        }
+        return underAttack;
     }
 
 }
