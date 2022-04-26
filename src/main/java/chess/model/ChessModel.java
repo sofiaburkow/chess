@@ -2,6 +2,7 @@ package chess.model;
 
 import chess.model.piece.Type;
 import grid.GridLocationIterator;
+import grid.IGrid;
 import grid.Location;
 
 import java.util.ArrayList;
@@ -68,8 +69,19 @@ public class ChessModel {
     public boolean validMove(Move move) {
         if (this.getTile(move.source).isEmpty()) {
             return false;
+        } else if (resultsInChess(move)) {
+            return false;
         }
         return this.getTile(move.source).piece.canMove(this, move);
+    }
+
+    private ChessModel copy() {
+        ChessModel copy = new ChessModel();
+        for (Location loc : this.locations()) {
+            copy.setTile(loc, this.getTile(loc));
+        }
+        copy.currentIndex = currentIndex;
+        return copy;
     }
 
     /**
@@ -120,5 +132,30 @@ public class ChessModel {
         }
         return underAttack;
     }
+
+    public boolean resultsInChess(Move move) {
+        ChessModel copy = this.copy();
+        copy.setTile(move.destination, this.getTile(move.source));
+        copy.setTile(move.source, new Tile(null));
+
+        List<Location> underAttack = new ArrayList<>();
+        for (Location loc : board.locations()) {
+            if (copy.isOnBoard(loc) && !copy.getTile(loc).isEmpty()) {
+                if (copy.getTile(loc).piece.getTeam() != getCurrentPlayer() && copy.getTile(loc).getPiece() != Type.KING) {
+                    List<Move> moves = copy.getTile(loc).piece.getValidMoves((ChessModel) copy, loc);
+                    for (Move m : moves) {
+                        underAttack.add(m.destination);
+                    }
+                }
+            }
+        }
+        for (Location attack : underAttack) {
+            if (!copy.getTile(attack).isEmpty() && copy.getTile(attack).getPiece() == Type.KING) {
+                return true;
+            }
+        }
+        return  false;
+    }
+
 
 }

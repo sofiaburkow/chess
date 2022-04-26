@@ -3,6 +3,7 @@ package chess.GUI;
 import chess.model.ChessModel;
 import chess.model.Move;
 import chess.model.Team;
+import chess.model.piece.Type;
 import grid.Grid;
 import grid.Location;
 
@@ -141,6 +142,15 @@ public class ClickableBoard extends JPanel {
         return true;
     }
 
+    public boolean isCheck() {
+        for (Location underAttack : board.tilesUnderAttack()) {
+            if (!board.getTile(underAttack).isEmpty() && board.getTile(underAttack).getPiece() == Type.KING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     class ClickableBoardListener extends MouseAdapter {
         // This is what happens when the mouse clicks on one of the squares of the grid.
         @Override
@@ -159,11 +169,16 @@ public class ClickableBoard extends JPanel {
                             // display valid moves
                             List<Move> moves = board.getTile(currentLocation).piece.getValidMoves(board,currentLocation);
                             for (Move move : moves) {
-                                setPossibleMove(clickablePanels.get(move.destination));
+                                if (!board.resultsInChess(move)) {
+                                    setPossibleMove(clickablePanels.get(move.destination));
+                                }
                             }
                         }
                     } else if (selectedPanels.size() == 1) {
                         Move move = new Move(selectedPanels.get(0), currentLocation);
+                        if (isCheck()) {
+                            System.out.println(isCheck());
+                        }
                         if (board.validMove(move)) {
                             if (board.getTile(currentLocation).isCastleMove()) {
                                 if (currentLocation.col == 6) {

@@ -30,7 +30,7 @@ public class King extends Piece {
             }
         }
         addCastleMoves(board, source, validMoves);
-        return checkForChess(board, validMoves);
+        return checkForCheck(board, validMoves);
     }
 
     /**
@@ -57,7 +57,7 @@ public class King extends Piece {
         }
     }
 
-    private List<Move> checkForChess(ChessModel board, List<Move> moves) {
+    private List<Move> checkForCheck(ChessModel board, List<Move> moves) {
         List<Move> validMoves = new ArrayList<>();
         List<Location> chess = board.tilesUnderAttack();
         for (Move move : moves) {
@@ -65,6 +65,8 @@ public class King extends Piece {
                 validMoves.add(move);
             }
         }
+        // TODO: fix pawn chess
+
         return validMoves;
     }
 
