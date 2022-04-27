@@ -2,7 +2,6 @@ package chess.model;
 
 import chess.model.piece.Type;
 import grid.GridLocationIterator;
-import grid.IGrid;
 import grid.Location;
 
 import java.util.ArrayList;
@@ -87,27 +86,27 @@ public class ChessModel {
     /**
      * Move the piece from the source tile to the destination tile and empty the source tile.
      */
-    public void movePiece(Move move) {
-        this.setTile(move.destination, this.getTile(move.source));
-        this.setTile(move.source, new Tile(null));
+    public void movePiece(ChessModel chessModel, Move move) {
+        chessModel.setTile(move.destination, chessModel.getTile(move.source));
+        chessModel.setTile(move.source, new Tile(null));
     }
 
     public void castleKingSideMove(Move move) {
-        movePiece(move);
+        movePiece(this, move);
         Location castleFrom = new Location(move.source.row, move.source.col+3);
         Location castleTo = new Location(move.source.row, move.source.col+1);
-        movePiece(new Move(castleFrom, castleTo));
+        movePiece(this, new Move(castleFrom, castleTo));
     }
 
     public void castleQueenSideMove(Move move) {
-        movePiece(move);
+        movePiece(this, move);
         Location castleFrom = new Location(move.source.row, move.source.col-4);
         Location castleTo = new Location(move.source.row, move.source.col-1);
-        movePiece(new Move(castleFrom, castleTo));
+        movePiece(this, new Move(castleFrom, castleTo));
     }
 
     public void enPassantMove(Move move) {
-        movePiece(move);
+        movePiece(this, move);
         if (move.destination.row == 2) {
             this.setTile(new Location(move.destination.row+1, move.destination.col), new Tile(null));
         } else {
@@ -116,14 +115,14 @@ public class ChessModel {
     }
 
     /**
-     * @return all tiles under attack.
+     * @return all tiles under attack from the opposite team.
      */
-    public List<Location> tilesUnderAttack() {
+    public List<Location> tilesUnderAttack(ChessModel chessModel) {
         List<Location> underAttack = new ArrayList<>();
         for (Location loc : board.locations()) {
-            if (this.isOnBoard(loc) && !this.getTile(loc).isEmpty()) {
-                if (this.getTile(loc).piece.getTeam() != getCurrentPlayer() && this.getTile(loc).getPiece() != Type.KING) {
-                    List<Move> moves = this.getTile(loc).piece.getValidMoves(this, loc);
+            if (chessModel.isOnBoard(loc) && !chessModel.getTile(loc).isEmpty()) {
+                if (chessModel.getTile(loc).piece.getTeam() != getCurrentPlayer() && chessModel.getTile(loc).piece.getPiece() != Type.KING) {
+                    List<Move> moves = chessModel.getTile(loc).piece.getValidMoves(chessModel, loc);
                     for (Move move : moves) {
                         underAttack.add(move.destination);
                     }
@@ -133,24 +132,21 @@ public class ChessModel {
         return underAttack;
     }
 
-    public boolean resultsInChess(Move move) {
-        ChessModel copy = this.copy();
-        copy.setTile(move.destination, this.getTile(move.source));
-        copy.setTile(move.source, new Tile(null));
-
-        List<Location> underAttack = new ArrayList<>();
-        for (Location loc : board.locations()) {
-            if (copy.isOnBoard(loc) && !copy.getTile(loc).isEmpty()) {
-                if (copy.getTile(loc).piece.getTeam() != getCurrentPlayer() && copy.getTile(loc).getPiece() != Type.KING) {
-                    List<Move> moves = copy.getTile(loc).piece.getValidMoves((ChessModel) copy, loc);
-                    for (Move m : moves) {
-                        underAttack.add(m.destination);
-                    }
-                }
+    public boolean isCheck() {
+        for (Location loc : this.tilesUnderAttack(this)) {
+            if (!this.getTile(loc).isEmpty() && this.getTile(loc).piece.getPiece() == Type.KING) {
+                return true;
             }
         }
-        for (Location attack : underAttack) {
-            if (!copy.getTile(attack).isEmpty() && copy.getTile(attack).getPiece() == Type.KING) {
+        return false;
+    }
+
+    public boolean resultsInChess(Move move) {
+        ChessModel copy = this.copy();
+        movePiece(copy, move);
+        List<Location> tilesUnderAttack = tilesUnderAttack(copy);
+        for (Location attack : tilesUnderAttack) {
+            if (!copy.getTile(attack).isEmpty() && copy.getTile(attack).piece.getPiece() == Type.KING) {
                 return true;
             }
         }

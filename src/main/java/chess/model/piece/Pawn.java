@@ -86,14 +86,18 @@ public class Pawn extends Piece {
             } else {
                 move = 1;
             }
-            if (isnEnPassant(board, source, previousMove)) {
+            if (isEnPassant(board, source, previousMove)) {
                 moves.add(new Move(source, new Location(previousMove.destination.row+move, previousMove.destination.col)));
                 board.getTile(new Location(previousMove.destination.row+move, previousMove.destination.col)).setEnPassant(true);
+            } else {
+                for (Location loc : board.locations()) {
+                    board.getTile(loc).setEnPassant(false);
+                }
             }
         }
     }
 
-    private boolean isnEnPassant(ChessModel board, Location source, Move move) {
+    private boolean isEnPassant(ChessModel board, Location source, Move move) {
         List<Location> locEnPassant = new ArrayList<>();
         locEnPassant.add(new Location(source.row, source.col-1));
         locEnPassant.add(new Location(source.row, source.col+1));

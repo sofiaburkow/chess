@@ -3,7 +3,6 @@ package chess.GUI;
 import chess.model.ChessModel;
 import chess.model.Move;
 import chess.model.Team;
-import chess.model.piece.Type;
 import grid.Grid;
 import grid.Location;
 
@@ -160,7 +159,7 @@ public class ClickableBoard extends JPanel {
                             // display valid moves
                             List<Move> moves = board.getTile(currentLocation).piece.getValidMoves(board,currentLocation);
                             for (Move move : moves) {
-                                if (!board.resultsInChess(move)) {
+                                if (board.validMove(move)) {
                                     setPossibleMove(clickablePanels.get(move.destination));
                                 }
                             }
@@ -177,7 +176,7 @@ public class ClickableBoard extends JPanel {
                             } else if (board.getTile(currentLocation).isEnPassant()) {
                                 board.enPassantMove(move);
                             } else {
-                                board.movePiece(move);
+                                board.movePiece(board, move);
                             }
                             board.getTile(currentLocation).piece.setHasMovedBefore(true);
                             currentPlayer = board.nextPlayer();

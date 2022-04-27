@@ -8,9 +8,18 @@ public class Tile {
     public final IPiece piece;
     private boolean castleMove;
     private boolean enPassant;
+    public final char initial;
 
     public Tile(IPiece piece) {
         this.piece = piece;
+        this.initial = ' ';
+        this.castleMove = false;
+        this.enPassant = false;
+    }
+
+    public Tile(IPiece piece, char initial) {
+        this.piece = piece;
+        this.initial = initial;
         this.castleMove = false;
         this.enPassant = false;
     }
@@ -20,10 +29,6 @@ public class Tile {
             return true;
         }
         return false;
-    }
-
-    public Type getPiece() {
-        return piece.getPiece();
     }
 
     public boolean isCastleMove() {
