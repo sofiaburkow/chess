@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Tile;
 import grid.Location;
 import org.junit.jupiter.api.Test;
@@ -11,10 +11,10 @@ public class QueenTest {
 
     @Test
     void getValidMovesTest() {
-        ChessModel board = new ChessModel();
+        ChessBoard board = new ChessBoard();
         Location loc = new Location(4,4);
-        board.setTile((loc), new Tile(new Queen(Color.WHITE)));
-        System.out.println(board.getTile(loc).piece.getValidMoves(board,loc));
+        board.set((loc), new Tile(new Queen(Color.WHITE)));
+        System.out.println(board.get(loc).piece.getValidMoves(board,loc));
     }
 
 }

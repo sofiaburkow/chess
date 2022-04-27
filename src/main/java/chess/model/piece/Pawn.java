@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Move;
 import grid.Location;
 
@@ -10,8 +10,17 @@ import java.util.List;
 
 public class Pawn extends Piece {
 
+    private int direction;
+
     public Pawn(Color color) {
         super(color);
+        // which way to move on the board according to the color of the piece
+        if (isWhite()) {
+            direction = -1;
+        } else {
+            direction = 1;
+        }
+
     }
 
     @Override
@@ -20,7 +29,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(ChessModel board, Location source) {
+    public List<Move> getValidMoves(ChessBoard board, Location source) {
         List<Move> moves = new ArrayList<>();
         addAdvanceMoves(board, source, moves);
         addCaptureMoves(board, source, moves);
@@ -29,82 +38,73 @@ public class Pawn extends Piece {
     }
 
     /**
-     * Add valid moves to the list of possible moves where the pawn advances on the board.
+     * Add valid moves where the pawn advances on the board to the list of possible moves.
      */
-    private void addAdvanceMoves(ChessModel board, Location source, List<Move> moves) {
-        int move;
-        if (isWhite()) {
-            move = -1;
-        } else {
-            move = 1;
-        }
-        Location advanceOne = new Location(source.row+move, source.col);
-        if (board.isOnBoard(advanceOne)) {
-            if (board.getTile(advanceOne).isEmpty()) {
+    private void addAdvanceMoves(ChessBoard board, Location source, List<Move> moves) {
+        // advance one tile
+        Location advanceOne = new Location(source.row+direction, source.col);
+        if (board.isOnGrid(advanceOne)) {
+            if (board.get(advanceOne).isEmpty()) {
                 moves.add(new Move(source, advanceOne));
             }
         }
-        if ((isWhite() && source.row == 6) || (!isWhite() && source.row == 1)) {
-            Location advanceTwo = new Location(source.row+move*2, source.col);
-            if (board.isOnBoard(advanceTwo)) {
-                if (board.getTile(new Location(source.row+move*1, source.col)).isEmpty() && (board.getTile(advanceTwo).isEmpty())) {
-                    Move advanceTwoMove = new Move(source, advanceTwo);
-                    moves.add(advanceTwoMove);
+        // advance two tiles
+        if (!this.hasMovedBefore) {
+            Location advanceTwo = new Location(source.row+direction*2, source.col);
+            if (board.isOnGrid(advanceTwo)) {
+                if (board.get(new Location(source.row+direction*1, source.col)).isEmpty() && (board.get(advanceTwo).isEmpty())) {
+                    moves.add(new Move(source, advanceTwo));
                 }
             }
         }
     }
 
     /**
-     * Add moves where the pawn can capture an opponents piece.
+     * Add moves where the pawn can capture an opponents piece diagonally.
      */
-    private void addCaptureMoves(ChessModel board, Location source, List<Move> moves) {
-        int move;
-        if (isWhite()) {
-            move = -1;
-        } else {
-            move = 1;
-        }
+    private void addCaptureMoves(ChessBoard board, Location source, List<Move> moves) {
         List<Location> captureMoves = new ArrayList<>();
-        captureMoves.add(new Location(source.row+move, source.col-1));
-        captureMoves.add(new Location(source.row+move, source.col+1));
+        captureMoves.add(new Location(source.row+direction, source.col-1));
+        captureMoves.add(new Location(source.row+direction, source.col+1));
         for (Location loc : captureMoves) {
-            if (board.isOnBoard(loc)) {
-                if (!board.getTile(loc).isEmpty() && board.getTile(loc).piece.getTeam() != getTeam()) {
+            if (board.isOnGrid(loc)) {
+                if (!board.get(loc).isEmpty() && board.get(loc).piece.getTeam() != getTeam()) {
                     moves.add(new Move(source, loc));
                 }
             }
         }
     }
 
-    private void addEnPassant(ChessModel board, Location source, List<Move> moves) {
+    /**
+     * Add en passant moves to the list of valid moves and set the en passant field variable
+     * of the destination tile to true.
+     */
+    private void addEnPassant(ChessBoard board, Location source, List<Move> moves) {
         if (board.getMoveHistory().size() >= 1) {
             Move previousMove = board.getMoveHistory().get(board.getMoveHistory().size()-1);
-            int move;
-            if (isWhite()) {
-                move = -1;
-            } else {
-                move = 1;
-            }
             if (isEnPassant(board, source, previousMove)) {
-                moves.add(new Move(source, new Location(previousMove.destination.row+move, previousMove.destination.col)));
-                board.getTile(new Location(previousMove.destination.row+move, previousMove.destination.col)).setEnPassant(true);
-            } else {
+                Location enPassantLocation = new Location(previousMove.destination.row+direction, previousMove.destination.col);
+                moves.add(new Move(source, enPassantLocation));
+                board.get(enPassantLocation).setEnPassant(true);
+            } else { // make sure that a tile is not set to en passant for more than one round
                 for (Location loc : board.locations()) {
-                    board.getTile(loc).setEnPassant(false);
+                    board.get(loc).setEnPassant(false);
                 }
             }
         }
     }
 
-    private boolean isEnPassant(ChessModel board, Location source, Move move) {
-        List<Location> locEnPassant = new ArrayList<>();
-        locEnPassant.add(new Location(source.row, source.col-1));
-        locEnPassant.add(new Location(source.row, source.col+1));
-        for (Location loc : locEnPassant) {
-            if (board.isOnBoard(loc) && !board.getTile(loc).isEmpty() && loc.equals(move.destination)) {
-                if (board.getTile(loc).piece.getPiece().equals(Type.PAWN) && board.getTile(loc).piece.isWhite() != isWhite()) {
-                    if (Math.abs(move.destination.row - move.source.row) == 2) {
+    /**
+     * Check whether the previous move results in the possibility for en passant.
+     */
+    private boolean isEnPassant(ChessBoard board, Location source, Move previousMove) {
+        List<Location> neighbourPawn = new ArrayList<>();
+        neighbourPawn.add(new Location(source.row, source.col-1));
+        neighbourPawn.add(new Location(source.row, source.col+1));
+        for (Location loc : neighbourPawn) {
+            if (board.isOnGrid(loc) && !board.get(loc).isEmpty() && loc.equals(previousMove.destination)) {
+                if (board.get(loc).piece.getPiece().equals(Type.PAWN) && board.get(loc).piece.isWhite() != isWhite()) {
+                    if (Math.abs(previousMove.destination.row - previousMove.source.row) == 2) {
                         return true;
                     }
                 }

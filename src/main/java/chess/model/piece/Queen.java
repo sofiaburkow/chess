@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Move;
 import grid.Location;
 
@@ -21,15 +21,15 @@ public class Queen extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(ChessModel board, Location source) {
+    public List<Move> getValidMoves(ChessBoard board, Location source) {
         List<Move> validMoves = new ArrayList<>();
-        addNeighbors(board, source, validMoves);
+        addNeighborMoves(board, source, validMoves);
         addHorizontalAndVerticalMoves(board, source, validMoves);
         addDiagonalMoves(board, source, validMoves);
         return validMoves;
     }
 
-    private void addNeighbors(ChessModel board, Location source, List<Move> moves) {
+    private void addNeighborMoves(ChessBoard board, Location source, List<Move> moves) {
         Collection<Location> neighbors = source.allNeighbors();
         for (Location loc : neighbors) {
             if (isValidDestinationTile(board, loc)) {
@@ -38,14 +38,14 @@ public class Queen extends Piece {
         }
     }
 
-    private void addHorizontalAndVerticalMoves(ChessModel board, Location source, List<Move> validMoves) {
+    private void addHorizontalAndVerticalMoves(ChessBoard board, Location source, List<Move> validMoves) {
         addValidMoves(board, source, 1,0, validMoves);
         addValidMoves(board, source, 0,1, validMoves);
         addValidMoves(board, source, -1,0, validMoves);
         addValidMoves(board, source, 0,-1, validMoves);
     }
 
-    private void addDiagonalMoves(ChessModel board, Location source, List<Move> validMoves) {
+    private void addDiagonalMoves(ChessBoard board, Location source, List<Move> validMoves) {
         addValidMoves(board, source, 1,1, validMoves);
         addValidMoves(board, source, 1,-1, validMoves);
         addValidMoves(board, source, -1,1, validMoves);

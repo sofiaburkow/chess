@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Move;
 import chess.model.Team;
 import grid.Location;
@@ -12,7 +12,7 @@ public interface IPiece {
     /**
      * Keeps track of whether the piece has moved before or not.
      *
-     * @return true if the piece has moved before, otherwise false.
+     * @return true if the piece has moved before, otherwise return false.
      */
     boolean hasMovedBefore();
 
@@ -48,12 +48,12 @@ public interface IPiece {
      *
      * @return list of valid moves.
      */
-    List<Move> getValidMoves(ChessModel board, Location source);
+    List<Move> getValidMoves(ChessBoard board, Location source);
 
     /**
      * Checks whether a given move is valid or not.
      *
-     * @return true if the move is valid, otherwise false.
+     * @return true if the move is valid, otherwise return false.
      */
-    boolean canMove(ChessModel board, Move move);
+    boolean canMove(ChessBoard board, Move move);
 }

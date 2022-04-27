@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Move;
 import grid.Location;
 
@@ -20,7 +20,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(ChessModel board, Location source) {
+    public List<Move> getValidMoves(ChessBoard board, Location source) {
         List<Move> validMoves = new ArrayList<>();
         addValidMoves(board, source, 1,0, validMoves);
         addValidMoves(board, source, 0,1, validMoves);

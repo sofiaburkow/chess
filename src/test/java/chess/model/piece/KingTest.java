@@ -1,13 +1,13 @@
 package chess.model.piece;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import org.junit.jupiter.api.Test;
 
 public class KingTest {
 
     @Test
     public void getValidMovesTest() {
-        ChessModel board = new ChessModel();
+        ChessBoard board = new ChessBoard();
     }
 
 }

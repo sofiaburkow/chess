@@ -1,6 +1,6 @@
 package chess;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.GUI.ClickableBoard;
 
 import javax.swing.JFrame;
@@ -15,7 +15,7 @@ public class ChessMain {
         JFrame frame = new JFrame(WINDOW_TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ChessModel chess = new ChessModel();
+        ChessBoard chess = new ChessBoard();
         JPanel clickableBoard = new ClickableBoard(chess);
         frame.setContentPane(clickableBoard);
 

@@ -1,6 +1,6 @@
 package chess.GUI;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Move;
 import chess.model.Team;
 import grid.Grid;
@@ -15,10 +15,10 @@ import java.util.List;
 
 public class ClickableBoard extends JPanel {
 
+    private ChessBoard board;
     private MouseAdapter adapter;
-    private Grid<TilePanel> clickablePanels;
-    private ChessModel board;
     private Team currentPlayer;
+    private Grid<TilePanel> clickablePanels;
     private Color tileColor;
 
     /**
@@ -27,7 +27,7 @@ public class ClickableBoard extends JPanel {
     private List<Location> selectedPanels;
 
     /**
-     * Locations of panels which represents valid moves.
+     * Locations of panels which represent valid moves.
      */
     private List<Location> possibleMoves;
 
@@ -36,10 +36,10 @@ public class ClickableBoard extends JPanel {
      */
     private boolean confirmMove;
 
-    public ClickableBoard(ChessModel board) {
+    public ClickableBoard(ChessBoard board) {
         this.board = board;
-        this.currentPlayer = board.getCurrentPlayer();
         adapter = new ClickableBoardListener();
+        this.currentPlayer = board.getCurrentPlayer();
 
         // create clickable panels
         int rows = board.numRows();
@@ -58,15 +58,14 @@ public class ClickableBoard extends JPanel {
      */
     public void updateGui() {
         for (Location loc : board.locations()) {
-            if (board.getTile(loc).isEmpty()) {
+            if (board.get(loc).isEmpty()) {
                 clickablePanels.get(loc).setPiece(null);
                 clickablePanels.get(loc).setPieceColor(null);
             } else {
-                clickablePanels.get(loc).setPiece(board.getTile(loc).piece.getPiece());
-                clickablePanels.get(loc).setPieceColor(board.getTile(loc).piece.getPieceColor());
+                clickablePanels.get(loc).setPiece(board.get(loc).piece.getPiece());
+                clickablePanels.get(loc).setPieceColor(board.get(loc).piece.getPieceColor());
             }
         }
-        validate(); //TODO: why?
         repaint();
     }
 
@@ -104,7 +103,7 @@ public class ClickableBoard extends JPanel {
     }
 
     /**
-     * Sets the given panel as sa possible move in TilePanel class,
+     * Sets the given panel as a possible move in TilePanel class,
      * and adds the panel to the list of possible moves
      */
     public void setPossibleMove(TilePanel panel) {
@@ -134,13 +133,6 @@ public class ClickableBoard extends JPanel {
         possibleMoves.clear();
     }
 
-    public boolean validSourceTile(Location loc) {
-        if (board.getTile(loc).isEmpty() || board.getTile(loc).piece.getTeam() != currentPlayer) {
-            return false;
-        }
-        return true;
-    }
-
     class ClickableBoardListener extends MouseAdapter {
         // This is what happens when the mouse clicks on one of the squares of the grid.
         @Override
@@ -154,34 +146,34 @@ public class ClickableBoard extends JPanel {
                         confirmMove = true;
                     }
                     if (selectedPanels.size() == 0) {
-                        if (validSourceTile(currentLocation)) {
+                        if (board.isValidSourceTile(currentLocation)) {
                             setSelected(currentPanel);
                             // display valid moves
-                            List<Move> moves = board.getTile(currentLocation).piece.getValidMoves(board,currentLocation);
+                            List<Move> moves = board.get(currentLocation).piece.getValidMoves(board,currentLocation);
                             for (Move move : moves) {
-                                if (board.validMove(move)) {
+                                if (board.isValidMove(move)) {
                                     setPossibleMove(clickablePanels.get(move.destination));
                                 }
                             }
                         }
                     } else if (selectedPanels.size() == 1) {
                         Move move = new Move(selectedPanels.get(0), currentLocation);
-                        if (board.validMove(move)) {
-                            if (board.getTile(currentLocation).isCastleMove()) {
+                        if (board.isValidMove(move)) {
+                            if (board.get(currentLocation).isCastleMove()) {
                                 if (currentLocation.col == 6) {
                                     board.castleKingSideMove(move);
                                 } else if (currentLocation.col == 2) {
                                     board.castleQueenSideMove(move);
                                 }
-                            } else if (board.getTile(currentLocation).isEnPassant()) {
+                            } else if (board.get(currentLocation).isEnPassant()) {
                                 board.enPassantMove(move);
                             } else {
                                 board.movePiece(board, move);
                             }
-                            board.getTile(currentLocation).piece.setHasMovedBefore(true);
-                            currentPlayer = board.nextPlayer();
-                            deselectPanels();
                             board.addMoveToMoveHistory(move);
+                            board.get(currentLocation).piece.setHasMovedBefore(true);
+                            currentPlayer = board.getNextPlayer();
+                            deselectPanels();
                         }
 
                     }

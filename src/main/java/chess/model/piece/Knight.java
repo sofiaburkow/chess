@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Move;
 import grid.Location;
 
@@ -20,9 +20,9 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(ChessModel board, Location source) {
-        List<Move> possibleMoves = getPossibleMoves(source);
+    public List<Move> getValidMoves(ChessBoard board, Location source) {
         List<Move> validMoves = new ArrayList<>();
+        List<Move> possibleMoves = getPossibleMoves(source);
         for (Move move : possibleMoves) {
             if (isValidDestinationTile(board,move.destination)) {
                 validMoves.add(move);

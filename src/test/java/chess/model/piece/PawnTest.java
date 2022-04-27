@@ -2,7 +2,7 @@ package chess.model.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import chess.model.ChessModel;
+import chess.model.ChessBoard;
 import chess.model.Move;
 import chess.model.Tile;
 import grid.Location;
@@ -22,9 +22,9 @@ public class PawnTest {
 
     @Test
     void pawnAtStartingPositionMoves() {
-        ChessModel board = new ChessModel();
+        ChessBoard board = new ChessBoard();
         Location pawnLocation = new Location(1,3);
-        List<Move> moves = board.getTile(pawnLocation).piece.getValidMoves(board,pawnLocation);
+        List<Move> moves = board.get(pawnLocation).piece.getValidMoves(board,pawnLocation);
 
         List<Location> trueMoves = new ArrayList<>();
         trueMoves.add(new Location(2,3));
@@ -37,14 +37,14 @@ public class PawnTest {
 
     @Test
     void pawnNotAtStartingPositionMoves() {
-        ChessModel board = new ChessModel();
+        ChessBoard board = new ChessBoard();
         Location oldPawnLocation = new Location(1,3);
         Location newPawnLocation = new Location(2,3);
-        Tile pawnTile = board.getTile(oldPawnLocation);
-        board.setTile(oldPawnLocation, null);
-        board.setTile(newPawnLocation, pawnTile);
+        Tile pawnTile = board.get(oldPawnLocation);
+        board.set(oldPawnLocation, null);
+        board.set(newPawnLocation, pawnTile);
 
-        List<Move> moves = board.getTile(newPawnLocation).piece.getValidMoves(board,newPawnLocation);
+        List<Move> moves = board.get(newPawnLocation).piece.getValidMoves(board,newPawnLocation);
 
         List<Location> trueMoves = new ArrayList<>();
         trueMoves.add(new Location(3,3));
