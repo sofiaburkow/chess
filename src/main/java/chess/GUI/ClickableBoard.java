@@ -174,12 +174,10 @@ public class ClickableBoard extends JPanel {
                         confirmMove = false;
                     }
                     updateGui();
-                    /*
+
                     if (board.getGameState() == GameState.CHECKMATE) {
                         gameOverScreen();
                     }
-
-                     */
 
                 } catch (Exception e) {
                     System.err.println(e.getMessage());

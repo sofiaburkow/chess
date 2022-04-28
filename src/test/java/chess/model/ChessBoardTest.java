@@ -114,4 +114,15 @@ public class ChessBoardTest {
         assertEquals(expectedBoardString, charString);
     }
 
+    @Test
+    public void checkMateTest() {
+
+    }
+
+    @Test
+    public void staleMateTest() {
+
+
+    }
+
 }

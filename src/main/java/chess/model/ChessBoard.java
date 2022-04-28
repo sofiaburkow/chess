@@ -287,14 +287,15 @@ public class ChessBoard extends Grid<Tile> {
     }
 
     /**
-     * Check whether the current player is under check and can't move the king
-     * or kill the opponent threat.
+     * Check whether it is checkmate. This is the case if the current player
+     * is under check and can't move the king or kill the piece threatening the king.
      */
     private boolean isCheckMate() {
         if (isCheck(this)) {
-            for (Move move : getAllMoves()) {
+            List<Move> moves = getAllMoves();
+            for (Move move : moves) {
                 ChessBoard copy = this.copy();
-                copy.movePiece(this, move);
+                copy.movePiece(copy, move);
                 if (!isCheck(copy)) {
                     return false;
                 }
