@@ -45,7 +45,9 @@ public class Pawn extends Piece {
         Location advanceOne = new Location(source.row+direction, source.col);
         if (board.isOnGrid(advanceOne)) {
             if (board.get(advanceOne).isEmpty()) {
-                moves.add(new Move(source, advanceOne));
+                Move move = new Move(source, advanceOne);
+                move.setNotCaptureMove(true);
+                moves.add(move);
             }
         }
         // advance two tiles
@@ -53,7 +55,9 @@ public class Pawn extends Piece {
             Location advanceTwo = new Location(source.row+direction*2, source.col);
             if (board.isOnGrid(advanceTwo)) {
                 if (board.get(new Location(source.row+direction*1, source.col)).isEmpty() && (board.get(advanceTwo).isEmpty())) {
-                    moves.add(new Move(source, advanceTwo));
+                    Move move = new Move(source, advanceTwo);
+                    move.setNotCaptureMove(true);
+                    moves.add(move);
                 }
             }
         }

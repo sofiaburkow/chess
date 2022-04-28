@@ -27,7 +27,39 @@ public class ChessBoard extends Grid<Tile> {
     }
 
     /**
+     * Convert the current chess board to an array of chars.
+     *
+     * @return an array of chars.
+     */
+    public char[][] fromBoardToCharArray() {
+        char[][] charArray = new char[this.numRows()][this.numColumns()];
+        for (Location loc : this.locations()) {
+            charArray[loc.row][loc.col] = this.get(loc).initial;
+        }
+        return charArray;
+    }
+
+    /**
+     * Convert a two-dimensional array of chars to a string with a new line
+     * character separating the rows.
+     *
+     * @return string with chars.
+     */
+    public String fromCharArrayToString(char[][] charArray) {
+        String charString = "";
+        for (int row = 0; row < this.numRows(); row++) {
+            for (int col = 0; col < this.numColumns(); col++) {
+                charString += charArray[row][col];
+            }
+            charString += "\n";
+        }
+        return charString;
+    }
+
+    /**
      * Initialize a standard chess board.
+     * The initials of the black pieces is in capital letters, while the
+     * initials of the white pieces is in lowercase letters.
      */
     public void initializeBoard() {
         // black pieces
@@ -92,12 +124,9 @@ public class ChessBoard extends Grid<Tile> {
 
     /**
      * Move on to the next player.
-     *
-     * @return the team of the next player.
      */
-    public Team getNextPlayer() {
+    public void nextPlayer() {
         currentIndex = (currentIndex + 1) % 2;
-        return getCurrentPlayer();
     }
 
     /**
@@ -138,10 +167,14 @@ public class ChessBoard extends Grid<Tile> {
     /**
      * Move the piece from a given tile to another, and set the source tile
      * equal to a new empty tile.
+     * Does not check whether a move is valid or not, only if it is on the board.
      */
     public void movePiece(ChessBoard board, Move move) {
-        board.set(move.destination, board.get(move.source));
-        board.set(move.source, new Tile(null));
+        if (board.isOnGrid(move.source) && board.isOnGrid(move.destination)) {
+            board.set(move.destination, board.get(move.source));
+            board.set(move.source, new Tile(null));
+            board.addMoveToMoveHistory(move);
+        }
     }
 
     /**
@@ -152,15 +185,34 @@ public class ChessBoard extends Grid<Tile> {
         List<Location> underAttack = new ArrayList<>();
         for (Location loc : board.locations()) {
             if (board.isOnGrid(loc) && !board.get(loc).isEmpty()) {
-                if (board.get(loc).piece.getTeam() != getCurrentPlayer() && board.get(loc).piece.getPiece() != Type.KING) {
-                    List<Move> moves = board.get(loc).piece.getValidMoves(board, loc);
-                    for (Move move : moves) {
-                        underAttack.add(move.destination);
+                if (board.get(loc).piece.getTeam() != getCurrentPlayer()) {
+                    if (board.get(loc).piece.getPiece() != Type.KING) {
+                        List<Move> moves = board.get(loc).piece.getValidMoves(board, loc);
+                        for (Move move : moves) {
+                            if (!move.isNotCaptureMove()) {
+                                underAttack.add(move.destination);
+                            }
+                        }
                     }
                 }
             }
         }
         return underAttack;
+    }
+
+    /**
+     * Check whether the king of the current team is in check or not.
+     *
+     * @return true if check, otherwise false.
+     */
+    public boolean isCheck(ChessBoard board) {
+        List<Location> underAttack = board.tilesUnderAttack(board);
+        for (Location loc : underAttack) {
+            if (!board.get(loc).isEmpty() && board.get(loc).piece.getPiece() == Type.KING) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -218,6 +270,67 @@ public class ChessBoard extends Grid<Tile> {
         } else {
             this.set(new Location(move.destination.row-1, move.destination.col), new Tile(null));
         }
+    }
+
+    /**
+     * Check the game state of the current board. If the board is either game over or active.
+     * If game over it can either be due to checkmate or stalemate.
+     *
+     * @return the state of the game.
+     */
+    public GameState getGameState() {
+        if (isCheckMate()) {
+            return GameState.CHECKMATE;
+        } else if (isStaleMate()) {
+            return GameState.STALEMATE;
+        }
+        return GameState.ACTIVE;
+    }
+
+    /**
+     * Check whether the current player is under check and can't move the king
+     * or kill the opponent threat.
+     */
+    private boolean isCheckMate() {
+        if (isCheck(this)) {
+            for (Move move : getAllMoves()) {
+                ChessBoard copy = this.copy();
+                copy.movePiece(this, move);
+                if (!isCheck(copy)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check whether the current player is NOT under check, but still can't move any pieces.
+     */
+    private boolean isStaleMate() {
+        if (!isCheck(this)) {
+            if (getAllMoves().size() == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method to get all valid moves of the current team.
+     */
+    private List<Move> getAllMoves() {
+        List<Move> possibleMoves = new ArrayList<>();
+        for (Location loc : this.locations()) {
+            if (!this.get(loc).isEmpty() && this.get(loc).piece.getTeam() == getCurrentPlayer()) {
+                List<Move> moves = this.get(loc).piece.getValidMoves(this, loc);
+                for (Move move : moves) {
+                    possibleMoves.add(move);
+                }
+            }
+        }
+        return possibleMoves;
     }
 
 }

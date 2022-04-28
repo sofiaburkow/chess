@@ -1,8 +1,8 @@
 package chess.GUI;
 
 import chess.model.ChessBoard;
+import chess.model.GameState;
 import chess.model.Move;
-import chess.model.Team;
 import grid.Grid;
 import grid.Location;
 
@@ -17,29 +17,19 @@ public class ClickableBoard extends JPanel {
 
     private ChessBoard board;
     private MouseAdapter adapter;
-    private Team currentPlayer;
     private Grid<TilePanel> clickablePanels;
     private Color tileColor;
 
-    /**
-     * Locations of panels which have been selected.
-     */
+    // Locations of panels which have been selected.
     private List<Location> selectedPanels;
-
-    /**
-     * Locations of panels which represent valid moves.
-     */
+    // Locations of panels which represent valid moves.
     private List<Location> possibleMoves;
-
-    /**
-     * Boolean used to confirm double click of a panel to deselect all panels.
-     */
+    // Boolean used to confirm double click of a panel to deselect all panels.
     private boolean confirmMove;
 
     public ClickableBoard(ChessBoard board) {
         this.board = board;
         adapter = new ClickableBoardListener();
-        this.currentPlayer = board.getCurrentPlayer();
 
         // create clickable panels
         int rows = board.numRows();
@@ -133,8 +123,11 @@ public class ClickableBoard extends JPanel {
         possibleMoves.clear();
     }
 
+    private void gameOverScreen() {
+        System.out.println("game over man");
+    }
+
     class ClickableBoardListener extends MouseAdapter {
-        // This is what happens when the mouse clicks on one of the squares of the grid.
         @Override
         public void mousePressed(MouseEvent me) {
             if (clickablePanels.contains(me.getSource())) {
@@ -170,18 +163,22 @@ public class ClickableBoard extends JPanel {
                             } else {
                                 board.movePiece(board, move);
                             }
-                            board.addMoveToMoveHistory(move);
                             board.get(currentLocation).piece.setHasMovedBefore(true);
-                            currentPlayer = board.getNextPlayer();
                             deselectPanels();
+                            board.nextPlayer();
                         }
-
                     }
                     if (confirmMove) {
                         deselectPanels();
                         confirmMove = false;
                     }
                     updateGui();
+                    /*
+                    if (board.getGameState() == GameState.CHECKMATE) {
+                        gameOverScreen();
+                    }
+
+                     */
 
                 } catch (Exception e) {
                     System.err.println(e.getMessage());

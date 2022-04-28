@@ -8,11 +8,12 @@ public class Tile {
     public final IPiece piece;
     private boolean castleMove;
     private boolean enPassant;
+    // Represents the initial of the piece. For test purposes.
     public final char initial;
 
     public Tile(IPiece piece) {
         this.piece = piece;
-        this.initial = ' ';
+        this.initial = '-';
         this.castleMove = false;
         this.enPassant = false;
     }

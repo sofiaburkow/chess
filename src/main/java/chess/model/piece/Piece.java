@@ -11,9 +11,7 @@ import java.util.List;
 public abstract class Piece implements IPiece {
 
     protected Color color;
-    /**
-     * boolean value to keep track of whether a piece has moved before or not.
-     */
+    // Boolean value to keep track of whether a piece has moved before or not.
     protected boolean hasMovedBefore;
 
     public Piece(Color color) {

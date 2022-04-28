@@ -1,56 +1,85 @@
 package chess.model.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import chess.model.ChessBoard;
 import chess.model.Move;
-import chess.model.Tile;
 import grid.Location;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PawnTest {
 
     @Test
-    void getPieceTest() {
-        Pawn pawn = new Pawn(Color.BLACK);
-        assertEquals(Type.PAWN, pawn.getPiece());
-    }
+    public void pawnAtStartingPositionMoves() {
 
-    @Test
-    void pawnAtStartingPositionMoves() {
         ChessBoard board = new ChessBoard();
-        Location pawnLocation = new Location(1,3);
-        List<Move> moves = board.get(pawnLocation).piece.getValidMoves(board,pawnLocation);
+        Location startingLocationWP = new Location(6, 4);
+        java.util.List<Move> moves = board.get(startingLocationWP).piece.getValidMoves(board, startingLocationWP);
 
-        List<Location> trueMoves = new ArrayList<>();
-        trueMoves.add(new Location(2,3));
-        trueMoves.add(new Location(3,3));
+        List<Move> validMoves = new ArrayList<>();
+        validMoves.add(new Move(startingLocationWP, new Location(5,4)));
+        validMoves.add(new Move(startingLocationWP, new Location(4,4)));
 
-        for (int i = 0; i < trueMoves.size(); i++) {
-            assertEquals(trueMoves.get(i), moves.get(i));
+        assertEquals(validMoves.size(), moves.size());
+        for (Move move : moves) {
+            assertTrue(validMoves.contains(move));
         }
     }
 
     @Test
-    void pawnNotAtStartingPositionMoves() {
+    public void pawnNotAtStartingPositionMoves() {
+
         ChessBoard board = new ChessBoard();
-        Location oldPawnLocation = new Location(1,3);
-        Location newPawnLocation = new Location(2,3);
-        Tile pawnTile = board.get(oldPawnLocation);
-        board.set(oldPawnLocation, null);
-        board.set(newPawnLocation, pawnTile);
+        // move some pieces around
+        Location startingLocationBB = new Location(0, 2);
+        Location newLocationBB = new Location(3,3);
+        Location startingLocationWP = new Location(6, 4);
+        Location newLocationWP = new Location(4,4);
+        board.movePiece(board, new Move(startingLocationBB, newLocationBB));
+        board.movePiece(board, new Move(startingLocationWP, newLocationWP));
+        board.get(newLocationWP).piece.setHasMovedBefore(true);
 
-        List<Move> moves = board.get(newPawnLocation).piece.getValidMoves(board,newPawnLocation);
+        // get possible pawn moves
+        java.util.List<Move> moves = board.get(newLocationWP).piece.getValidMoves(board, newLocationWP);
 
-        List<Location> trueMoves = new ArrayList<>();
-        trueMoves.add(new Location(3,3));
+        List<Move> validMoves = new ArrayList<>();
+        validMoves.add(new Move(newLocationWP, new Location(3,3)));
+        validMoves.add(new Move(newLocationWP, new Location(3,4)));
 
-        for (int i = 0; i < trueMoves.size(); i++) {
-            assertEquals(trueMoves.get(i), moves.get(i));
+        assertEquals(validMoves.size(), moves.size());
+        for (Move move : moves) {
+            assertTrue(validMoves.contains(move));
+        }
+    }
+
+    @Test
+    public void enPassantTest() {
+
+        ChessBoard board = new ChessBoard();
+        // move the attacking white pawn
+        Location startingLocationWP = new Location(6, 5);
+        Location newLocationWP = new Location(3,5);
+        board.movePiece(board, new Move(startingLocationWP, newLocationWP));
+        board.get(newLocationWP).piece.setHasMovedBefore(true);
+        // move the black pawn to a location which allows for en passant
+        Location startingLocationBP = new Location(1, 6);
+        Location newLocationBP = new Location(3,6);
+        board.movePiece(board, new Move(startingLocationBP, newLocationBP));
+
+        // get possible white pawn moves
+        java.util.List<Move> moves = board.get(newLocationWP).piece.getValidMoves(board, newLocationWP);
+
+        List<Move> validMoves = new ArrayList<>();
+        validMoves.add(new Move(newLocationWP, new Location(2,5)));
+        validMoves.add(new Move(newLocationWP, new Location(2,6)));
+
+        assertEquals(validMoves.size(), moves.size());
+        for (Move move : moves) {
+            assertTrue(validMoves.contains(move));
         }
     }
 

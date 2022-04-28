@@ -39,7 +39,7 @@ public class King extends Piece {
      * Check for both castling king side and castling queen side.
      */
     private void addCastleMoves(ChessBoard board, Location source, List<Move> moves) {
-        if (!this.hasMovedBefore() && !isCheck(board)) {
+        if (!this.hasMovedBefore() && !board.isCheck(board)) {
             // king side castling
             Location castleKS = new Location(source.row, source.col+3);
             if (!board.get(castleKS).isEmpty() && !board.get(castleKS).piece.hasMovedBefore()) {
@@ -59,21 +59,6 @@ public class King extends Piece {
                 }
             }
         }
-    }
-
-    /**
-     * Check whether the king is in check or not.
-     *
-     * @return true if check, otherwise false.
-     */
-    public boolean isCheck(ChessBoard board) {
-        List<Location> underAttack = board.tilesUnderAttack(board);
-        for (Location loc : underAttack) {
-            if (!board.get(loc).isEmpty() && board.get(loc).piece.getPiece() == Type.KING) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
