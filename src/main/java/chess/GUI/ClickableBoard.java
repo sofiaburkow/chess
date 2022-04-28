@@ -163,8 +163,9 @@ public class ClickableBoard extends JPanel {
                             } else {
                                 board.movePiece(board, move);
                             }
-                            board.get(currentLocation).piece.setHasMovedBefore(true);
                             deselectPanels();
+                            board.get(currentLocation).piece.setHasMovedBefore(true);
+                            board.addMoveToMoveHistory(move);
                             board.nextPlayer();
                         }
                     }

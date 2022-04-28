@@ -41,7 +41,6 @@ public class PawnTest {
         Location newLocationWP = new Location(4,4);
         board.movePiece(board, new Move(startingLocationBB, newLocationBB));
         board.movePiece(board, new Move(startingLocationWP, newLocationWP));
-        board.get(newLocationWP).piece.setHasMovedBefore(true);
 
         // get possible pawn moves
         java.util.List<Move> moves = board.get(newLocationWP).piece.getValidMoves(board, newLocationWP);
@@ -64,7 +63,6 @@ public class PawnTest {
         Location startingLocationWP = new Location(6, 5);
         Location newLocationWP = new Location(3,5);
         board.movePiece(board, new Move(startingLocationWP, newLocationWP));
-        board.get(newLocationWP).piece.setHasMovedBefore(true);
         // move the black pawn to a location which allows for en passant
         Location startingLocationBP = new Location(1, 6);
         Location newLocationBP = new Location(3,6);

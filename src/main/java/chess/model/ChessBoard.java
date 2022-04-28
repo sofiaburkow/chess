@@ -166,14 +166,13 @@ public class ChessBoard extends Grid<Tile> {
 
     /**
      * Move the piece from a given tile to another, and set the source tile
-     * equal to a new empty tile.
+     * equal to an empty new tile.
      * Does not check whether a move is valid or not, only if it is on the board.
      */
     public void movePiece(ChessBoard board, Move move) {
         if (board.isOnGrid(move.source) && board.isOnGrid(move.destination)) {
             board.set(move.destination, board.get(move.source));
             board.set(move.source, new Tile(null));
-            board.addMoveToMoveHistory(move);
         }
     }
 
