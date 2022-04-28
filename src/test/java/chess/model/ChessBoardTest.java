@@ -3,8 +3,10 @@ package chess.model;
 import grid.Location;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ChessBoardTest {
 
@@ -63,33 +65,29 @@ public class ChessBoardTest {
     public void isValidMoveTest() {
 
         ChessBoard board = new ChessBoard();
-        // move black pieces
-        board.movePiece(board, new Move(new Location(0,4), new Location(3,2)));
-        board.movePiece(board, new Move(new Location(1,4), new Location(3,4)));
         // move white pieces
         board.movePiece(board, new Move(new Location(7,5), new Location(3,1)));
         board.movePiece(board, new Move(new Location(7,1), new Location(5,2)));
         board.movePiece(board, new Move(new Location(6,3), new Location(5,3)));
         board.movePiece(board, new Move(new Location(6,4), new Location(4,4)));
         board.movePiece(board, new Move(new Location(7,3), new Location(4,6)));
+        board.nextPlayer();
 
-        char[][] charArray = board.fromBoardToCharArray();
-        String charString = board.fromCharArrayToString(charArray);
+        // move black pieces
+        Location newLocationBK = new Location(3,2);
+        board.movePiece(board, new Move(new Location(0,4), newLocationBK));
+        board.get(newLocationBK).piece.setHasMovedBefore(true);
+        board.movePiece(board, new Move(new Location(1,4), new Location(3,4)));
 
-        String expectedBoardString =
-                        "RNBQ-BNR\n" +
-                        "PPPP-PPP\n" +
-                        "--------\n" +
-                        "-bK-P---\n" +
-                        "----p-q-\n" +
-                        "--np----\n" +
-                        "ppp--ppp\n" +
-                        "r-b-k-nr\n";
+        assertTrue(board.isValidMove(new Move(newLocationBK, new Location(2,1))));
+        assertTrue(board.isValidMove(new Move(newLocationBK, new Location(2,3))));
+        assertTrue(board.isValidMove(new Move(newLocationBK, new Location(4,1))));
+        assertTrue(board.isValidMove(new Move(newLocationBK, new Location(4,3))));
 
-        assertEquals(expectedBoardString, charString);
-        //List<Move> moves = board.get()
-        //assertTrue(board.isValidMove(new Move(new Location(3,2), new Location(4,3))));
-        //assertTrue(board.isValidMove(new Move(new Location(3,2), new Location(4,1))));
+        assertFalse(board.isValidMove(new Move(newLocationBK, new Location(2,2))));
+        assertFalse(board.isValidMove(new Move(newLocationBK, new Location(3,1))));
+        assertFalse(board.isValidMove(new Move(newLocationBK, new Location(3,3))));
+        assertFalse(board.isValidMove(new Move(newLocationBK, new Location(4,2))));
     }
 
     @Test

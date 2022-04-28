@@ -41,6 +41,7 @@ public class PawnTest {
         Location newLocationWP = new Location(4,4);
         board.movePiece(board, new Move(startingLocationBB, newLocationBB));
         board.movePiece(board, new Move(startingLocationWP, newLocationWP));
+        board.get(newLocationWP).piece.setHasMovedBefore(true);
 
         // get possible pawn moves
         java.util.List<Move> moves = board.get(newLocationWP).piece.getValidMoves(board, newLocationWP);
@@ -67,6 +68,7 @@ public class PawnTest {
         Location startingLocationBP = new Location(1, 6);
         Location newLocationBP = new Location(3,6);
         board.movePiece(board, new Move(startingLocationBP, newLocationBP));
+        board.addMoveToMoveHistory(new Move(startingLocationBP, newLocationBP));
 
         // get possible white pawn moves
         java.util.List<Move> moves = board.get(newLocationWP).piece.getValidMoves(board, newLocationWP);

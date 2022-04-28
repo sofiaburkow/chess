@@ -305,7 +305,7 @@ public class ChessBoard extends Grid<Tile> {
     }
 
     /**
-     * Check whether the current player is NOT under check, but still can't move any pieces.
+     * Check whether the current player can't move any of its peaces. The king is also not in check.
      */
     private boolean isStaleMate() {
         if (!isCheck(this)) {
