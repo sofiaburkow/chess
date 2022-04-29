@@ -1,6 +1,5 @@
 package chess.model.piece;
 
-import chess.model.ChessBoard;
 import chess.model.IBoard;
 import chess.model.Move;
 import grid.Location;
@@ -22,11 +21,14 @@ public class Bishop extends Piece {
 
     @Override
     public List<Move> getValidMoves(IBoard board, Location source) {
+
         List<Move> validMoves = new ArrayList<>();
+
         addValidMoves(board, source, 1,1, validMoves);
         addValidMoves(board, source, 1,-1, validMoves);
         addValidMoves(board, source, -1,1, validMoves);
         addValidMoves(board, source, -1,-1, validMoves);
+
         return validMoves;
     }
 

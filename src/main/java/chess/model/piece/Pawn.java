@@ -1,6 +1,5 @@
 package chess.model.piece;
 
-import chess.model.ChessBoard;
 import chess.model.IBoard;
 import chess.model.Move;
 import grid.Location;
@@ -21,7 +20,6 @@ public class Pawn extends Piece {
         } else {
             direction = 1;
         }
-
     }
 
     @Override
@@ -31,10 +29,13 @@ public class Pawn extends Piece {
 
     @Override
     public List<Move> getValidMoves(IBoard board, Location source) {
+
         List<Move> moves = new ArrayList<>();
+
         addAdvanceMoves(board, source, moves);
         addCaptureMoves(board, source, moves);
         addEnPassant(board, source, moves);
+
         return moves;
     }
 
@@ -57,6 +58,7 @@ public class Pawn extends Piece {
             if (board.isOnGrid(advanceTwo)) {
                 if (board.get(new Location(source.row+direction*1, source.col)).isEmpty() && (board.get(advanceTwo).isEmpty())) {
                     Move move = new Move(source, advanceTwo);
+                    // necessary to keep track of this when trying to figure out if a king move results in check
                     move.setNotCaptureMove(true);
                     moves.add(move);
                 }
@@ -100,7 +102,7 @@ public class Pawn extends Piece {
     }
 
     /**
-     * Check whether the previous move results in the possibility for en passant.
+     * Check whether the previous move results in the possibility of en passant.
      */
     private boolean isEnPassant(IBoard board, Location source, Move previousMove) {
         List<Location> neighbourPawn = new ArrayList<>();

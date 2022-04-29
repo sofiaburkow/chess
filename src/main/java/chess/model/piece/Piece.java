@@ -58,7 +58,7 @@ public abstract class Piece implements IPiece {
 
     @Override
     public boolean canMove(IBoard board, Move move) {
-        if (getValidMoves(board, move.source).contains(move) && !board.resultsInCheck(move)) {
+        if (getValidMoves(board, move.source).contains(move) && !board.moveResultsInCheck(move)) {
             return true;
         }
         return false;
@@ -96,4 +96,5 @@ public abstract class Piece implements IPiece {
             }
         }
     }
+
 }

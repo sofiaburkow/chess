@@ -1,14 +1,11 @@
 package chess;
 
-import chess.GUI.IGame;
 import chess.model.ChessBoard;
 import chess.GUI.ClickableBoard;
-import chess.model.GameState;
 import chess.model.IBoard;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.*;
 
 public class ChessMain {
 

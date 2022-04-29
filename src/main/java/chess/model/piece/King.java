@@ -1,6 +1,5 @@
 package chess.model.piece;
 
-import chess.model.ChessBoard;
 import chess.model.IBoard;
 import chess.model.Move;
 import grid.Location;
@@ -23,6 +22,7 @@ public class King extends Piece {
 
     @Override
     public List<Move> getValidMoves(IBoard board, Location source) {
+
         List<Move> validMoves = new ArrayList<>();
         Collection<Location> neighbors = source.allNeighbors();
         for (Location loc : neighbors) {
@@ -31,6 +31,7 @@ public class King extends Piece {
             }
         }
         addCastleMoves(board, source, validMoves);
+
         return checkForCheck(board, validMoves);
     }
 

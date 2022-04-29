@@ -1,6 +1,5 @@
 package chess.model;
 
-import chess.GUI.IGame;
 import chess.model.piece.*;
 import grid.Grid;
 import grid.Location;
@@ -14,7 +13,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
     private List<Move> moveHistory;
     private List<Team> players;
     private int currentIndex;
-
 
     public ChessBoard() {
         super(8, 8, new Tile(null));
@@ -59,8 +57,8 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
 
     /**
      * Initialize a standard chess board.
-     * The initials of the black pieces is in capital letters, while the
-     * initials of the white pieces is in lowercase letters.
+     * The initials of the black pieces are in capital letters, while the
+     * initials of the white pieces are in lowercase letters.
      */
     public void initializeBoard() {
         // black pieces
@@ -102,52 +100,22 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         this.set(new Location(7,7), new Tile(new Rook(Color.WHITE), 'r'));
     }
 
-    /**
-     * @return a list of previous moves.
-     */
     public List<Move> getMoveHistory() {
         return moveHistory;
     }
 
-    /**
-     * Add a new move to the list of former moves.
-     */
     public void addMoveToMoveHistory(Move move) {
         moveHistory.add(move);
     }
 
-    /**
-     * @return the team of the current player.
-     */
     public Team getCurrentPlayer() {
         return players.get(currentIndex);
     }
 
-    /**
-     * Move on to the next player.
-     */
     public void nextPlayer() {
         currentIndex = (currentIndex + 1) % 2;
     }
 
-    /**
-     * Make a copy of the current chess board. Both the tiles and which teams
-     * turn it is, should be the same as with the original board.
-     */
-    public ChessBoard copy() {
-        ChessBoard copy = new ChessBoard();
-        for (Location loc : this.locations()) {
-            copy.set(loc, this.get(loc));
-        }
-        copy.currentIndex = currentIndex;
-        return copy;
-    }
-
-    /**
-     * Check whether the given source tile is valid or not.
-     *
-     * @return the true if the location contains a piece of the current player, otherwise false.
-     */
     public boolean isValidSourceTile(Location loc) {
         if (this.get(loc).isEmpty() || this.get(loc).piece.getTeam() != getCurrentPlayer()) {
             return false;
@@ -155,9 +123,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         return true;
     }
 
-    /**
-     * Check whether a move is valid or not.
-     */
     public boolean isValidMove(Move move) {
         if (this.get(move.source).isEmpty()) {
             return false;
@@ -165,11 +130,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         return this.get(move.source).piece.canMove(this, move);
     }
 
-    /**
-     * Move the piece from a given tile to another, and set the source tile
-     * equal to an empty new tile.
-     * Does not check whether a move is valid or not, only if it is on the board.
-     */
     public void movePiece(IBoard board, Move move) {
         if (board.isOnGrid(move.source) && board.isOnGrid(move.destination)) {
             board.set(move.destination, board.get(move.source));
@@ -177,10 +137,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         }
     }
 
-    /**
-     * Iterate over the tiles on the board, and make a list of all potential locations that
-     * a piece of the opposite team might move if it was that teams turn.
-     */
     public List<Location> tilesUnderAttack(IBoard board) {
         List<Location> underAttack = new ArrayList<>();
         for (Location loc : board.locations()) {
@@ -200,11 +156,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         return underAttack;
     }
 
-    /**
-     * Check whether the king of the current team is in check or not.
-     *
-     * @return true if check, otherwise false.
-     */
     public boolean isCheck(IBoard board) {
         List<Location> underAttack = board.tilesUnderAttack(board);
         for (Location loc : underAttack) {
@@ -215,11 +166,7 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         return false;
     }
 
-    /**
-     * Check whether a given move results in check.
-     * @return true if check, otherwise false.
-     */
-    public boolean resultsInCheck(Move move) {
+    public boolean moveResultsInCheck(Move move) {
         IBoard copy = this.copy();
         movePiece(copy, move);
         List<Location> underAttack = tilesUnderAttack(copy);
@@ -231,10 +178,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         return  false;
     }
 
-    /**
-     * Make a castle move on the king side of the board. Move both
-     * the king and the castle.
-     */
     public void castleKingSideMove(Move move) {
         // move the king
         movePiece(this, move);
@@ -244,10 +187,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         movePiece(this, new Move(castleFrom, castleTo));
     }
 
-    /**
-     * Make a castle move on the queen side of the board. Move both
-     * the king and the castle.
-     */
     public void castleQueenSideMove(Move move) {
         // move the king
         movePiece(this, move);
@@ -257,11 +196,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         movePiece(this, new Move(castleFrom, castleTo));
     }
 
-    /**
-     * Do an en passant move. That includes moving the pawn of the
-     * current team one tile diagonally, and removing the neighbouring pawn
-     * which got killed en passant.
-     */
     public void enPassantMove(Move move) {
         movePiece(this, move);
         // remove the pawn of the opposite team
@@ -272,12 +206,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         }
     }
 
-    /**
-     * Check the game state of the current board. If the board is either game over or active.
-     * If game over it can either be due to checkmate or stalemate.
-     *
-     * @return the state of the game.
-     */
     public GameState getGameState() {
         if (isCheckMate()) {
             return GameState.CHECKMATE;
@@ -332,6 +260,22 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
             }
         }
         return possibleMoves;
+    }
+
+    /**
+     * Make a copy of the current chess board. Both the tiles and which teams
+     * turn it is, should be the same as with the original board.
+     *
+     * Overrides the method in grid.
+     */
+    @Override
+    public ChessBoard copy() {
+        ChessBoard copy = new ChessBoard();
+        for (Location loc : this.locations()) {
+            copy.set(loc, this.get(loc));
+        }
+        copy.currentIndex = currentIndex;
+        return copy;
     }
 
 }

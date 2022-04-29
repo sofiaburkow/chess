@@ -22,13 +22,19 @@ public class Queen extends Piece {
 
     @Override
     public List<Move> getValidMoves(IBoard board, Location source) {
+
         List<Move> validMoves = new ArrayList<>();
+
         addNeighborMoves(board, source, validMoves);
         addHorizontalAndVerticalMoves(board, source, validMoves);
         addDiagonalMoves(board, source, validMoves);
+
         return validMoves;
     }
 
+    /**
+     * Add all moves that are either one row or one column away from the queens starting location.
+     */
     private void addNeighborMoves(IBoard board, Location source, List<Move> moves) {
         Collection<Location> neighbors = source.allNeighbors();
         for (Location loc : neighbors) {

@@ -27,7 +27,7 @@ public interface IPiece {
     boolean isWhite();
 
     /**
-     * @return Team.WHITE if the piece is on the white team, otherwise return Team.BLACK.
+     * @return WHITE if the piece is on the white team, otherwise return BLACK.
      */
     Team getTeam();
 
@@ -56,4 +56,5 @@ public interface IPiece {
      * @return true if the move is valid, otherwise return false.
      */
     boolean canMove(IBoard board, Move move);
+
 }

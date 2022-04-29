@@ -28,11 +28,6 @@ public interface IBoard {
     Tile get(Location loc);
 
     /**
-     * Iterate over all grid locations
-     */
-    GridLocationIterator locations();
-
-    /**
      * Check whether the given location is within the bounds of the board.
      *
      * @return true if the location is within bounds, false otherwise.
@@ -40,13 +35,34 @@ public interface IBoard {
     boolean isOnGrid(Location loc);
 
     /**
-     * @return a list of previous moves.
+     * Iterate over all grid locations
+     */
+    GridLocationIterator locations();
+
+    /**
+     * Add a new move to the list of previous moves.
+     */
+    void addMoveToMoveHistory(Move move);
+
+    /**
+     * @return a list of previous game moves.
      */
     List<Move> getMoveHistory();
 
     /**
+     * @return the team of the current player.
+     */
+    Team getCurrentPlayer();
+
+    /**
+     * Move on to the next player. This is done by increasing the index used
+     * to calculate who the current player is.
+     */
+    void nextPlayer();
+
+    /**
      * Iterate over the tiles on the board, and make a list of all potential locations that
-     * a piece of the opposite team might move if it was that teams turn.
+     * a piece of the opposite team poses a threat to.
      */
     List<Location> tilesUnderAttack(IBoard board);
 
@@ -61,23 +77,7 @@ public interface IBoard {
      * Check whether a given move results in check.
      * @return true if check, otherwise false.
      */
-    public boolean resultsInCheck(Move move);
-
-    /**
-     * @return the team of the current player.
-     */
-    Team getCurrentPlayer();
-
-    /**
-     * Move on to the next player. This is done by increasing the index used
-     * to calculate who the current player is.
-     */
-    void nextPlayer();
-
-    /**
-     * Add a new move to the list of former moves.
-     */
-    void addMoveToMoveHistory(Move move);
+    boolean moveResultsInCheck(Move move);
 
     /**
      * Check whether the given source tile is valid or not.
@@ -88,6 +88,8 @@ public interface IBoard {
 
     /**
      * Check whether a move is valid or not.
+     *
+     * @return true if valid, false otherwise.
      */
     boolean isValidMove(Move move);
 
