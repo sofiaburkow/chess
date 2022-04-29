@@ -1,11 +1,11 @@
-Sjakk
+**Sjakk**
 
 I forbindelse med semesteroppgave 2 valgte jeg åpen oppgave og å programmere sjakk.
 Jeg startet ikke helt fra scratch, men tok i bruk grid-klassene og de tilhørende testene til grid
 fra koden til Blob Wars. Tok også en god del inspirasjon fra GUI-klassene til Blob Wars når
 jeg lagde min egen GUI. 
 
-Regler
+_Regler_
 
 Sjakk-spillet jeg har programmert følger i all hovedsak de offisielle spillreglene for sjakk.
 Dessverre er det slik at jeg ikke rakk å implementere alle reglene før semesteroppgaven måtte inn.
@@ -13,13 +13,13 @@ Jeg rakk blant annet ikke å implementere "pawn promotion". Det er når en bonde
 og enten erstattes av en dronning, tårn, løper eller hest. I tillegg rakk jeg ikke å fikse alle de ulike
 måtene spillet kan ende på. Rakk kun å programmere checkmate og stalemate.
 
-How to play
+_How to play_
 
 For å flytte en brikke må man først trykke på brikken man ønsker å flytte, for så å trykke på flisen man ønsker 
 å flytte til, eller brikken man ønsker å slå ut. Det vil vises på brettet hvor man kan flytte / gyldige trekk. 
 Partiet er som tidligere nevnt først over om det oppstår checkmate eller stalemate.
 
-Arkitektur
+_Arkitektur_
 
 Når det kommer til arkitektur har jeg tatt mye inspirasjon både fra Tetris og Blob Wars. Prøvde å lage noe lignende 
 til GUI-pakken fra Blob Wars, men synes ikke selv at jeg fikk det helt til. Det er mye av grunnen til at game over
@@ -33,5 +33,5 @@ ChessBoard-metodene.
 
 Jevn over er det nok en del ting jeg ville ha løst annerledes om jeg skulle ha laget koden på nytt. Det vanskeligste 
 for meg med kodingen var ikke logikken bak sjakk (med unntak av en Passant), men heller hvordan jeg skulle sette
-opp og desine spillet. Vet at jeg trolig ville ha reddet inn en bedre poengsum om jeg valgt å gå for Blob Wars, 
-men hadde nok ikke lært like mye som jeg gjorde ved å velge åpen oppgave. 
+opp og designe spillet. Vet at jeg trolig ville ha reddet inn en bedre poengsum om jeg valgte å gå for Blob Wars, 
+men hadde nok ikke lært like mye som jeg gjorde nå ved å velge åpen oppgave. 
