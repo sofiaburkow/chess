@@ -123,8 +123,13 @@ public class ClickableBoard extends JPanel {
         possibleMoves.clear();
     }
 
-    private void gameOverScreen() {
-        System.out.println("game over man");
+    private void gameOver() {
+        if (board.getGameState() == GameState.CHECKMATE) {
+            board.nextPlayer();
+            System.out.printf("Checkmate. " + board.getCurrentPlayer() + " wins the game.");
+        } else if (board.getGameState() == GameState.STALEMATE) {
+            System.out.printf("Stalemate. It is a draw.");
+        }
     }
 
     class ClickableBoardListener extends MouseAdapter {
@@ -132,53 +137,54 @@ public class ClickableBoard extends JPanel {
         public void mousePressed(MouseEvent me) {
             if (clickablePanels.contains(me.getSource())) {
                 try {
-                    TilePanel currentPanel = (TilePanel) me.getSource();
-                    Location currentLocation = clickablePanels.locationOf(currentPanel);
-                    // check if panel has been previously selected
-                    if (selectedPanels.contains(currentLocation)) {
-                        confirmMove = true;
-                    }
-                    if (selectedPanels.size() == 0) {
-                        if (board.isValidSourceTile(currentLocation)) {
-                            setSelected(currentPanel);
-                            // display valid moves
-                            List<Move> moves = board.get(currentLocation).piece.getValidMoves(board,currentLocation);
-                            for (Move move : moves) {
-                                if (board.isValidMove(move)) {
-                                    setPossibleMove(clickablePanels.get(move.destination));
+                    if (board.getGameState() == GameState.ACTIVE) {
+                        TilePanel currentPanel = (TilePanel) me.getSource();
+                        Location currentLocation = clickablePanels.locationOf(currentPanel);
+                        // check if panel has been previously selected
+                        if (selectedPanels.contains(currentLocation)) {
+                            confirmMove = true;
+                        }
+                        if (selectedPanels.size() == 0) {
+                            if (board.isValidSourceTile(currentLocation)) {
+                                setSelected(currentPanel);
+                                // display valid moves
+                                List<Move> moves = board.get(currentLocation).piece.getValidMoves(board, currentLocation);
+                                for (Move move : moves) {
+                                    if (board.isValidMove(move)) {
+                                        setPossibleMove(clickablePanels.get(move.destination));
+                                    }
                                 }
+                            }
+                        } else if (selectedPanels.size() == 1) {
+                            Move move = new Move(selectedPanels.get(0), currentLocation);
+                            if (board.isValidMove(move)) {
+                                if (board.get(currentLocation).isCastleMove()) {
+                                    if (currentLocation.col == 6) {
+                                        board.castleKingSideMove(move);
+                                    } else if (currentLocation.col == 2) {
+                                        board.castleQueenSideMove(move);
+                                    }
+                                } else if (board.get(currentLocation).isEnPassant()) {
+                                    board.enPassantMove(move);
+                                } else {
+                                    board.movePiece(board, move);
+                                }
+                                deselectPanels();
+                                board.get(currentLocation).piece.setHasMovedBefore(true);
+                                board.addMoveToMoveHistory(move);
+                                board.nextPlayer();
                             }
                         }
-                    } else if (selectedPanels.size() == 1) {
-                        Move move = new Move(selectedPanels.get(0), currentLocation);
-                        if (board.isValidMove(move)) {
-                            if (board.get(currentLocation).isCastleMove()) {
-                                if (currentLocation.col == 6) {
-                                    board.castleKingSideMove(move);
-                                } else if (currentLocation.col == 2) {
-                                    board.castleQueenSideMove(move);
-                                }
-                            } else if (board.get(currentLocation).isEnPassant()) {
-                                board.enPassantMove(move);
-                            } else {
-                                board.movePiece(board, move);
-                            }
+                        if (confirmMove) {
                             deselectPanels();
-                            board.get(currentLocation).piece.setHasMovedBefore(true);
-                            board.addMoveToMoveHistory(move);
-                            board.nextPlayer();
+                            confirmMove = false;
+                        }
+                        updateGui();
+                        // if it is checkmate or stalemate, end the game
+                        if (board.getGameState() != GameState.ACTIVE) {
+                            gameOver();
                         }
                     }
-                    if (confirmMove) {
-                        deselectPanels();
-                        confirmMove = false;
-                    }
-                    updateGui();
-
-                    if (board.getGameState() == GameState.CHECKMATE) {
-                        gameOverScreen();
-                    }
-
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }

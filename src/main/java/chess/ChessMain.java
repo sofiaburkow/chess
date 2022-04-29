@@ -2,9 +2,11 @@ package chess;
 
 import chess.model.ChessBoard;
 import chess.GUI.ClickableBoard;
+import chess.model.GameState;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.*;
 
 public class ChessMain {
 
@@ -26,4 +28,5 @@ public class ChessMain {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
 }
