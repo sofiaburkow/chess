@@ -1,6 +1,7 @@
 package chess.model.piece;
 
 import chess.model.ChessBoard;
+import chess.model.IBoard;
 import chess.model.Move;
 import grid.Location;
 
@@ -21,7 +22,7 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(ChessBoard board, Location source) {
+    public List<Move> getValidMoves(IBoard board, Location source) {
         List<Move> validMoves = new ArrayList<>();
         Collection<Location> neighbors = source.allNeighbors();
         for (Location loc : neighbors) {
@@ -38,7 +39,7 @@ public class King extends Piece {
      * If a castling is possible, add it to the list of possible moves.
      * Check for both castling king side and castling queen side.
      */
-    private void addCastleMoves(ChessBoard board, Location source, List<Move> moves) {
+    private void addCastleMoves(IBoard board, Location source, List<Move> moves) {
         if (!this.hasMovedBefore() && !board.isCheck(board)) {
             // king side castling
             Location castleKS = new Location(source.row, source.col+3);
@@ -67,7 +68,7 @@ public class King extends Piece {
      *
      * @return a list of valid moves.
      */
-    private List<Move> checkForCheck(ChessBoard board, List<Move> moves) {
+    private List<Move> checkForCheck(IBoard board, List<Move> moves) {
         List<Move> validMoves = new ArrayList<>();
         List<Location> underAttack = board.tilesUnderAttack(board);
         for (Move move : moves) {

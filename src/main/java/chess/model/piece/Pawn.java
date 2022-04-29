@@ -1,6 +1,7 @@
 package chess.model.piece;
 
 import chess.model.ChessBoard;
+import chess.model.IBoard;
 import chess.model.Move;
 import grid.Location;
 
@@ -29,7 +30,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(ChessBoard board, Location source) {
+    public List<Move> getValidMoves(IBoard board, Location source) {
         List<Move> moves = new ArrayList<>();
         addAdvanceMoves(board, source, moves);
         addCaptureMoves(board, source, moves);
@@ -40,7 +41,7 @@ public class Pawn extends Piece {
     /**
      * Add valid moves where the pawn advances on the board to the list of possible moves.
      */
-    private void addAdvanceMoves(ChessBoard board, Location source, List<Move> moves) {
+    private void addAdvanceMoves(IBoard board, Location source, List<Move> moves) {
         // advance one tile
         Location advanceOne = new Location(source.row+direction, source.col);
         if (board.isOnGrid(advanceOne)) {
@@ -66,7 +67,7 @@ public class Pawn extends Piece {
     /**
      * Add moves where the pawn can capture an opponents piece diagonally.
      */
-    private void addCaptureMoves(ChessBoard board, Location source, List<Move> moves) {
+    private void addCaptureMoves(IBoard board, Location source, List<Move> moves) {
         List<Location> captureMoves = new ArrayList<>();
         captureMoves.add(new Location(source.row+direction, source.col-1));
         captureMoves.add(new Location(source.row+direction, source.col+1));
@@ -83,7 +84,7 @@ public class Pawn extends Piece {
      * Add en passant moves to the list of valid moves and set the en passant field variable
      * of the destination tile to true.
      */
-    private void addEnPassant(ChessBoard board, Location source, List<Move> moves) {
+    private void addEnPassant(IBoard board, Location source, List<Move> moves) {
         if (board.getMoveHistory().size() >= 1) {
             Move previousMove = board.getMoveHistory().get(board.getMoveHistory().size()-1);
             if (isEnPassant(board, source, previousMove)) {
@@ -101,7 +102,7 @@ public class Pawn extends Piece {
     /**
      * Check whether the previous move results in the possibility for en passant.
      */
-    private boolean isEnPassant(ChessBoard board, Location source, Move previousMove) {
+    private boolean isEnPassant(IBoard board, Location source, Move previousMove) {
         List<Location> neighbourPawn = new ArrayList<>();
         neighbourPawn.add(new Location(source.row, source.col-1));
         neighbourPawn.add(new Location(source.row, source.col+1));

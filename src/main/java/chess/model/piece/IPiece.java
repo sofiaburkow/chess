@@ -1,6 +1,6 @@
 package chess.model.piece;
 
-import chess.model.ChessBoard;
+import chess.model.IBoard;
 import chess.model.Move;
 import chess.model.Team;
 import grid.Location;
@@ -48,12 +48,12 @@ public interface IPiece {
      *
      * @return list of valid moves.
      */
-    List<Move> getValidMoves(ChessBoard board, Location source);
+    List<Move> getValidMoves(IBoard board, Location source);
 
     /**
      * Checks whether a given move is valid or not.
      *
      * @return true if the move is valid, otherwise return false.
      */
-    boolean canMove(ChessBoard board, Move move);
+    boolean canMove(IBoard board, Move move);
 }

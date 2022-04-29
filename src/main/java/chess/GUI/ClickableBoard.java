@@ -2,6 +2,7 @@ package chess.GUI;
 
 import chess.model.ChessBoard;
 import chess.model.GameState;
+import chess.model.IBoard;
 import chess.model.Move;
 import grid.Grid;
 import grid.Location;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class ClickableBoard extends JPanel {
 
-    private ChessBoard board;
+    private IBoard board;
     private MouseAdapter adapter;
     private Grid<TilePanel> clickablePanels;
     private Color tileColor;
@@ -27,7 +28,7 @@ public class ClickableBoard extends JPanel {
     // Boolean used to confirm double click of a panel to deselect all panels.
     private boolean confirmMove;
 
-    public ClickableBoard(ChessBoard board) {
+    public ClickableBoard(IBoard board) {
         this.board = board;
         adapter = new ClickableBoardListener();
 
@@ -127,6 +128,7 @@ public class ClickableBoard extends JPanel {
         if (board.getGameState() == GameState.CHECKMATE) {
             board.nextPlayer();
             System.out.printf("Checkmate. " + board.getCurrentPlayer() + " wins the game.");
+            board.nextPlayer();
         } else if (board.getGameState() == GameState.STALEMATE) {
             System.out.printf("Stalemate. It is a draw.");
         }

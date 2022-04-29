@@ -1,5 +1,6 @@
 package chess.model;
 
+import chess.GUI.IGame;
 import chess.model.piece.*;
 import grid.Grid;
 import grid.Location;
@@ -8,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChessBoard extends Grid<Tile> {
+public class ChessBoard extends Grid<Tile> implements IBoard {
 
     private List<Move> moveHistory;
     private List<Team> players;
@@ -169,7 +170,7 @@ public class ChessBoard extends Grid<Tile> {
      * equal to an empty new tile.
      * Does not check whether a move is valid or not, only if it is on the board.
      */
-    public void movePiece(ChessBoard board, Move move) {
+    public void movePiece(IBoard board, Move move) {
         if (board.isOnGrid(move.source) && board.isOnGrid(move.destination)) {
             board.set(move.destination, board.get(move.source));
             board.set(move.source, new Tile(null));
@@ -180,7 +181,7 @@ public class ChessBoard extends Grid<Tile> {
      * Iterate over the tiles on the board, and make a list of all potential locations that
      * a piece of the opposite team might move if it was that teams turn.
      */
-    public List<Location> tilesUnderAttack(ChessBoard board) {
+    public List<Location> tilesUnderAttack(IBoard board) {
         List<Location> underAttack = new ArrayList<>();
         for (Location loc : board.locations()) {
             if (board.isOnGrid(loc) && !board.get(loc).isEmpty()) {
@@ -204,7 +205,7 @@ public class ChessBoard extends Grid<Tile> {
      *
      * @return true if check, otherwise false.
      */
-    public boolean isCheck(ChessBoard board) {
+    public boolean isCheck(IBoard board) {
         List<Location> underAttack = board.tilesUnderAttack(board);
         for (Location loc : underAttack) {
             if (!board.get(loc).isEmpty() && board.get(loc).piece.getPiece() == Type.KING) {
@@ -219,7 +220,7 @@ public class ChessBoard extends Grid<Tile> {
      * @return true if check, otherwise false.
      */
     public boolean resultsInCheck(Move move) {
-        ChessBoard copy = this.copy();
+        IBoard copy = this.copy();
         movePiece(copy, move);
         List<Location> underAttack = tilesUnderAttack(copy);
         for (Location loc : underAttack) {
@@ -294,7 +295,7 @@ public class ChessBoard extends Grid<Tile> {
         if (isCheck(this)) {
             List<Move> moves = getAllMoves();
             for (Move move : moves) {
-                ChessBoard copy = this.copy();
+                IBoard copy = this.copy();
                 copy.movePiece(copy, move);
                 if (!isCheck(copy)) {
                     return false;
