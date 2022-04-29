@@ -32,6 +32,6 @@ et felles restriktivt grensesnitt IBord som begrenset GUI-en og brikkenes tilgan
 ChessBoard-metodene. 
 
 Jevn over er det nok en del ting jeg ville ha løst annerledes om jeg skulle ha laget koden på nytt. Det vanskeligste 
-for meg med kodingen var ikke logikken bak sjakk (med unntak av en Passant), men heller hvordan jeg skulle sette
-opp og desine spillet. Vet at jeg trolig ville ha reddet inn en bedre poengsum om jeg valgt å gå for Blob Wars, 
-men hadde nok ikke lært like mye som jeg gjorde ved å velge åpen oppgave. 
+for meg med kodingen var ikke logikken bak sjakk (med unntak av En Passant), men heller hvordan jeg skulle sette
+opp og designe spillet. Vet at jeg trolig ville ha reddet inn en bedre poengsum om jeg valgte å gå for Blob Wars, 
+men hadde nok ikke lært like mye som jeg gjorde nå ved å velge åpen oppgave. 
