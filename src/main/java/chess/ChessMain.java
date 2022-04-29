@@ -21,10 +21,8 @@ public class ChessMain {
         frame.setContentPane(clickableBoard);
 
         frame.pack();
-        frame.setVisible(true);
-
-        // Centers the window on the screen
         frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
         frame.setVisible(true);
     }
 

@@ -60,7 +60,7 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
      * The initials of the black pieces are in capital letters, while the
      * initials of the white pieces are in lowercase letters.
      */
-    public void initializeBoard() {
+    private void initializeBoard() {
         // black pieces
         this.set(new Location(0,0), new Tile(new Rook(Color.BLACK), 'R'));
         this.set(new Location(0,1), new Tile(new Knight(Color.BLACK), 'N'));
@@ -100,12 +100,12 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
         this.set(new Location(7,7), new Tile(new Rook(Color.WHITE), 'r'));
     }
 
-    public List<Move> getMoveHistory() {
-        return moveHistory;
-    }
-
     public void addMoveToMoveHistory(Move move) {
         moveHistory.add(move);
+    }
+
+    public List<Move> getMoveHistory() {
+        return moveHistory;
     }
 
     public Team getCurrentPlayer() {
@@ -114,27 +114,6 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
 
     public void nextPlayer() {
         currentIndex = (currentIndex + 1) % 2;
-    }
-
-    public boolean isValidSourceTile(Location loc) {
-        if (this.get(loc).isEmpty() || this.get(loc).piece.getTeam() != getCurrentPlayer()) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean isValidMove(Move move) {
-        if (this.get(move.source).isEmpty()) {
-            return false;
-        }
-        return this.get(move.source).piece.canMove(this, move);
-    }
-
-    public void movePiece(IBoard board, Move move) {
-        if (board.isOnGrid(move.source) && board.isOnGrid(move.destination)) {
-            board.set(move.destination, board.get(move.source));
-            board.set(move.source, new Tile(null));
-        }
     }
 
     public List<Location> tilesUnderAttack(IBoard board) {
@@ -176,6 +155,27 @@ public class ChessBoard extends Grid<Tile> implements IBoard {
             }
         }
         return  false;
+    }
+
+    public boolean isValidSourceTile(Location loc) {
+        if (this.get(loc).isEmpty() || this.get(loc).piece.getTeam() != getCurrentPlayer()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isValidMove(Move move) {
+        if (this.get(move.source).isEmpty()) {
+            return false;
+        }
+        return this.get(move.source).piece.canMove(this, move);
+    }
+
+    public void movePiece(IBoard board, Move move) {
+        if (board.isOnGrid(move.source) && board.isOnGrid(move.destination)) {
+            board.set(move.destination, board.get(move.source));
+            board.set(move.source, new Tile(null));
+        }
     }
 
     public void castleKingSideMove(Move move) {

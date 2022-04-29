@@ -1,6 +1,5 @@
 package chess.GUI;
 
-import chess.model.ChessBoard;
 import chess.model.GameState;
 import chess.model.IBoard;
 import chess.model.Move;
@@ -60,6 +59,9 @@ public class ClickableBoard extends JPanel {
         repaint();
     }
 
+    /**
+     * Make clickable panels. Each panel represents a tile on the chess board.
+     */
     private void makeClickablePanels() {
         for (Location loc : board.locations()) {
             if ((loc.row + loc.col) % 2 == 0) {
@@ -124,28 +126,36 @@ public class ClickableBoard extends JPanel {
         possibleMoves.clear();
     }
 
+    /**
+     * The method is called when the game is over. In this case it just prints out
+     * whether the game ended in checkmate or stalemate.
+     */
     private void gameOver() {
         if (board.getGameState() == GameState.CHECKMATE) {
             board.nextPlayer();
-            System.out.printf("Checkmate. " + board.getCurrentPlayer() + " wins the game.");
+            System.out.printf("Checkmate! " + board.getCurrentPlayer() + " wins the game.");
             board.nextPlayer();
         } else if (board.getGameState() == GameState.STALEMATE) {
-            System.out.printf("Stalemate. It is a draw.");
+            System.out.printf("Stalemate! It is a draw.");
         }
     }
 
     class ClickableBoardListener extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent me) {
+
             if (clickablePanels.contains(me.getSource())) {
                 try {
                     if (board.getGameState() == GameState.ACTIVE) {
                         TilePanel currentPanel = (TilePanel) me.getSource();
                         Location currentLocation = clickablePanels.locationOf(currentPanel);
+
                         // check if panel has been previously selected
                         if (selectedPanels.contains(currentLocation)) {
                             confirmMove = true;
                         }
+
+                        // when no valid source tile has been selected
                         if (selectedPanels.size() == 0) {
                             if (board.isValidSourceTile(currentLocation)) {
                                 setSelected(currentPanel);
@@ -157,7 +167,9 @@ public class ClickableBoard extends JPanel {
                                     }
                                 }
                             }
-                        } else if (selectedPanels.size() == 1) {
+                        }
+                        // when a valid source tile has been selected
+                        else if (selectedPanels.size() == 1) {
                             Move move = new Move(selectedPanels.get(0), currentLocation);
                             if (board.isValidMove(move)) {
                                 if (board.get(currentLocation).isCastleMove()) {
@@ -177,15 +189,18 @@ public class ClickableBoard extends JPanel {
                                 board.nextPlayer();
                             }
                         }
+
                         if (confirmMove) {
                             deselectPanels();
                             confirmMove = false;
                         }
                         updateGui();
+
                         // if it is checkmate or stalemate, end the game
                         if (board.getGameState() != GameState.ACTIVE) {
                             gameOver();
                         }
+
                     }
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -194,6 +209,7 @@ public class ClickableBoard extends JPanel {
                 System.err.println("Clicked on wrong thing: " + me.getSource());
             }
         }
+
     }
 
 }

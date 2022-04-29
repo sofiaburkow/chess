@@ -1,6 +1,5 @@
 package chess.GUI;
 
-import chess.model.piece.IPiece;
 import chess.model.piece.Type;
 
 import javax.imageio.ImageIO;
@@ -74,10 +73,17 @@ public class TilePanel extends JPanel {
         this.pieceColor = pieceColor;
     }
 
+    /**
+     * Update the field variable isSelected.
+     */
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
 
+    /**
+     * Set the field variable possibleMove to either true or false.
+     * True if the panel represents a possible move, otherwise false.
+     */
     public void setPossibleMove(boolean possibleMove) {
         isPossibleMove = possibleMove;
     }
