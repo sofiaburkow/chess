@@ -3,15 +3,12 @@ package chess.model;
 import grid.Location;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ChessBoardTest {
 
     @Test
-    void createChessBoardTest() {
+    void createStandardChessBoardTest() {
 
         ChessBoard board = new ChessBoard();
         char[][] charArray = board.fromBoardToCharArray();
@@ -117,12 +114,13 @@ public class ChessBoardTest {
     @Test
     public void checkMateTest() {
 
-    }
+        ChessBoard board = new ChessBoard();
+        // move the pieces to simulate checkmate
+        board.movePiece(board, new Move(new Location(7,5), new Location(4,2)));
+        board.movePiece(board, new Move(new Location(7,3), new Location(1,5)));
+        board.nextPlayer();
 
-    @Test
-    public void staleMateTest() {
-
-
+        assertTrue(board.getGameState() == GameState.CHECKMATE);
     }
 
 }

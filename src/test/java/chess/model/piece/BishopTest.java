@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import chess.model.ChessBoard;
+import chess.model.IBoard;
 import chess.model.Move;
 import grid.Location;
 import org.junit.jupiter.api.Test;

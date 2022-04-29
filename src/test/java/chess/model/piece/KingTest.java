@@ -32,6 +32,7 @@ public class KingTest {
         Location startingLocationWB = new Location(7, 5);
         Location newLocationWB = new Location(4,2);
         board.movePiece(board, new Move(startingLocationWB, newLocationWB));
+
         board.nextPlayer();
 
         // get possible black king moves
