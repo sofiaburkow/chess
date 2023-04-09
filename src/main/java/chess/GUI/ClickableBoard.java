@@ -42,6 +42,12 @@ public class ClickableBoard extends JPanel {
         makeClickablePanels();
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        paintGameOverScreen(g);
+    }
+
     /**
      * Should be called after a click to update the GUI to reflect
      * the current state of the board.
@@ -140,6 +146,15 @@ public class ClickableBoard extends JPanel {
         }
     }
 
+    private void paintGameOverScreen(Graphics g) {
+        if (board.getGameState() != GameState.CHECKMATE && board.getGameState() != GameState.STALEMATE) {
+            return;
+        }
+        super.paintComponent(g);
+        g.setColor(Color.RED);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+    }
+
     class ClickableBoardListener extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent me) {
@@ -187,6 +202,18 @@ public class ClickableBoard extends JPanel {
                                 board.get(currentLocation).piece.setHasMovedBefore(true);
                                 board.addMoveToMoveHistory(move);
                                 board.nextPlayer();
+                            } else {
+                                deselectPanels();
+                                if (board.isValidSourceTile(currentLocation)) {
+                                    setSelected(currentPanel);
+                                    // display valid moves
+                                    List<Move> moves = board.get(currentLocation).piece.getValidMoves(board, currentLocation);
+                                    for (Move move2 : moves) {
+                                        if (board.isValidMove(move2)) {
+                                            setPossibleMove(clickablePanels.get(move2.destination));
+                                        }
+                                    }
+                                }
                             }
                         }
 
@@ -209,7 +236,6 @@ public class ClickableBoard extends JPanel {
                 System.err.println("Clicked on wrong thing: " + me.getSource());
             }
         }
-
     }
 
 }
