@@ -23,7 +23,6 @@ public class ChessMain {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setVisible(true);
     }
 
 }

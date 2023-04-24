@@ -44,7 +44,6 @@ public class ClickableBoard extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-
         paintGameOverScreen(g);
     }
 
@@ -118,7 +117,7 @@ public class ClickableBoard extends JPanel {
     }
 
     /**
-     * Iterate through all selected panels and panels of possible moves and deselect.
+     * Iterate through all selected panels, and panels of possible moves and deselect.
      * Clear list of selected panels and possible moves.
      */
     public void deselectPanels() {
@@ -133,6 +132,24 @@ public class ClickableBoard extends JPanel {
     }
 
     /**
+     * Loop through all moves, and display all of those who are valid.
+     */
+    private void displayValidMoves(TilePanel currentPanel, Location currentLocation) {
+        // deselect all currently selected panels
+        deselectPanels();
+        // show all possible moves
+        if (board.isValidSourceTile(currentLocation)) {
+            setSelected(currentPanel);
+            List<Move> moves = board.get(currentLocation).piece.getValidMoves(board, currentLocation);
+            for (Move move : moves) {
+                if (board.isValidMove(move)) {
+                    setPossibleMove(clickablePanels.get(move.destination));
+                }
+            }
+        }
+    }
+
+    /**
      * The method is called when the game is over. In this case it just prints out
      * whether the game ended in checkmate or stalemate.
      */
@@ -142,10 +159,13 @@ public class ClickableBoard extends JPanel {
             System.out.printf("Checkmate! " + board.getCurrentPlayer() + " wins the game.");
             board.nextPlayer();
         } else if (board.getGameState() == GameState.STALEMATE) {
-            System.out.printf("Stalemate! It is a draw.");
+            System.out.printf("Stalemate! It's a draw.");
         }
     }
 
+    /**
+     * When the game is over, display a game over screen.
+     */
     private void paintGameOverScreen(Graphics g) {
         if (board.getGameState() != GameState.CHECKMATE && board.getGameState() != GameState.STALEMATE) {
             return;
@@ -170,20 +190,11 @@ public class ClickableBoard extends JPanel {
                             confirmMove = true;
                         }
 
-                        // when no valid source tile has been selected
+                        // when no valid source tile has previously been selected
                         if (selectedPanels.size() == 0) {
-                            if (board.isValidSourceTile(currentLocation)) {
-                                setSelected(currentPanel);
-                                // display valid moves
-                                List<Move> moves = board.get(currentLocation).piece.getValidMoves(board, currentLocation);
-                                for (Move move : moves) {
-                                    if (board.isValidMove(move)) {
-                                        setPossibleMove(clickablePanels.get(move.destination));
-                                    }
-                                }
-                            }
+                            displayValidMoves(currentPanel, currentLocation);
                         }
-                        // when a valid source tile has been selected
+                        // when a valid source tile has been previously been selected
                         else if (selectedPanels.size() == 1) {
                             Move move = new Move(selectedPanels.get(0), currentLocation);
                             if (board.isValidMove(move)) {
@@ -202,18 +213,9 @@ public class ClickableBoard extends JPanel {
                                 board.get(currentLocation).piece.setHasMovedBefore(true);
                                 board.addMoveToMoveHistory(move);
                                 board.nextPlayer();
-                            } else {
-                                deselectPanels();
-                                if (board.isValidSourceTile(currentLocation)) {
-                                    setSelected(currentPanel);
-                                    // display valid moves
-                                    List<Move> moves = board.get(currentLocation).piece.getValidMoves(board, currentLocation);
-                                    for (Move move2 : moves) {
-                                        if (board.isValidMove(move2)) {
-                                            setPossibleMove(clickablePanels.get(move2.destination));
-                                        }
-                                    }
-                                }
+                            }
+                            else {
+                                displayValidMoves(currentPanel, currentLocation);
                             }
                         }
 

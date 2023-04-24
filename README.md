@@ -2,7 +2,7 @@
 
 I forbindelse med semesteroppgave 2 valgte jeg åpen oppgave og å programmere sjakk.
 Jeg startet ikke helt fra scratch, men tok i bruk grid-klassene og de tilhørende testene til grid
-fra koden til Blob Wars. Tok også en god del inspirasjon fra GUI-klassene til Blob Wars når
+fra koden til Blob Wars (fra INF101 sem2 V21). Tok også en god del inspirasjon fra GUI-klassene til Blob Wars når
 jeg lagde min egen GUI. 
 
 _Regler_
@@ -17,7 +17,7 @@ _How to play_
 
 For å flytte en brikke må man først trykke på brikken man ønsker å flytte, for så å trykke på flisen man ønsker 
 å flytte til, eller brikken man ønsker å slå ut. Det vil vises på brettet hvor man kan flytte / gyldige trekk. 
-Partiet er som tidligere nevnt først over om det oppstår checkmate eller stalemate.
+Partiet er først over om det oppstår checkmate eller stalemate.
 
 _Arkitektur_
 
