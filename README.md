@@ -34,3 +34,6 @@ ChessBoard-metodene.
 Jevnt over er det nok en del ting jeg ville ha løst annerledes om jeg skulle ha laget koden på nytt. Det vanskeligste 
 for meg med kodingen var ikke logikken bak sjakk (med unntak av en passant), men heller hvordan jeg skulle sette
 opp og designe spillet.
+
+_Link til video_
+https://www.youtube.com/watch?v=94H0_qw_TDE
