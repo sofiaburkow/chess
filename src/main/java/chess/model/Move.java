@@ -14,7 +14,7 @@ public class Move {
     public Move(Location source, Location destination) {
         this.source = source;
         this.destination = destination;
-        notCaptureMove = false;
+        this.notCaptureMove = false;
     }
 
     /**
@@ -23,7 +23,7 @@ public class Move {
      * @return true if not a capture move, otherwise false.
      */
     public boolean isNotCaptureMove() {
-        return notCaptureMove;
+        return this.notCaptureMove;
     }
 
     /**

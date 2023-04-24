@@ -117,7 +117,7 @@ public class ClickableBoard extends JPanel {
     }
 
     /**
-     * Iterate through all selected panels, and panels of possible moves and deselect.
+     * Iterate through all selected panels and panels of possible moves and deselect.
      * Clear list of selected panels and possible moves.
      */
     public void deselectPanels() {
