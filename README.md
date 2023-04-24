@@ -36,4 +36,5 @@ for meg med kodingen var ikke logikken bak sjakk (med unntak av en passant), men
 opp og designe spillet.
 
 _Link til video_
+
 https://www.youtube.com/watch?v=94H0_qw_TDE
