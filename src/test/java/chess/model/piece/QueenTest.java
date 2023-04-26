@@ -41,7 +41,7 @@ public class QueenTest {
         validMoves.add(new Move(newLocation, new Location(2,6)));
         validMoves.add(new Move(newLocation, new Location(2,7)));
 
-        // I do not test whether the siz of these lists are equal since moves contains a valid move multiple times
+        // I do not test whether the size of these lists are equal since moves contains a valid move multiple times
         for (Move move : moves) {
             assertTrue(validMoves.contains(move));
         }
