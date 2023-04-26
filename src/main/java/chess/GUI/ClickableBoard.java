@@ -214,6 +214,7 @@ public class ClickableBoard extends JPanel {
                                 board.addMoveToMoveHistory(move);
                                 board.nextPlayer();
                             }
+                            // when the selected tile is not a valid move for the selected piece
                             else {
                                 displayValidMoves(currentPanel, currentLocation);
                             }
